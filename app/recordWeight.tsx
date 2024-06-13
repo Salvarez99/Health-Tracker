@@ -10,8 +10,13 @@ export default function recordWeight (){
     const [weight, onChangeWeight] = useState('');
 
     const onRecord = () =>{
-        console.log('weight: ' + weight + ' ' + selectedValue);
-        router.back();
+
+        if (weight === ''){
+            alert('Enter weight')
+        }else{
+            console.log('weight: ' + weight + ' ' + selectedValue);
+            router.back();
+        }
     }
     return(
         <View style={styles.mainContainer}>

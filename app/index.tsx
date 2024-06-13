@@ -5,11 +5,13 @@ import {
   StyleSheet, 
   FlatList,
 } from "react-native";
+import {LineChart} from 'react-native-gifted-charts';
 import { useRouter } from "expo-router";
 
 export default function Index() {
   const router = useRouter();
 
+  const data1=[ {value:50}, {value:80}, {value:90}, {value:70} ]
   interface recordItem {
     weight: string;
     date: string;
@@ -32,7 +34,11 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <View style={styles.chartView}>
-
+        <LineChart 
+          data={data1}
+          width={320}
+          height={260}
+          />
       </View>
       <View style={styles.recordsView}>
         <FlatList 
@@ -58,7 +64,9 @@ const styles = StyleSheet.create({
     flex : 5,
     backgroundColor : '#ffff',
     borderBottomWidth : 1,
-    elevation : 5
+    elevation : 5,
+    paddingTop : 10,
+    paddingLeft : 5,
   },
   recordsView : {
     flex : 6,
