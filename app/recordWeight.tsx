@@ -1,34 +1,64 @@
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Picker} from '@react-native-picker/picker';
 import {useRouter} from 'expo-router';
+import * as Local from '../LocalDB/InitializeLocal';
 
 export default function recordWeight (){
 
     const router = useRouter();
-    const [selectedValue, setSelectedValue] = useState('lbs');
+    const [units, setUnits] = useState('lbs');
     const [weight, onChangeWeight] = useState('');
+    const [date, setDate] = useState('');
+
+    //Formats and set's current day as string
+    useEffect(()=>{
+        const currentDate = new Date(); 
+        const options: Intl.DateTimeFormatOptions = { 
+            year: 'numeric', 
+            month: 'short', 
+            day: '2-digit' 
+          };
+        const formattedDate = currentDate.toLocaleDateString('en-US', options);
+        setDate(formattedDate);
+    },[])
 
     const onRecord = () =>{
 
         if (weight === ''){
             alert('Enter weight')
         }else{
-            console.log('weight: ' + weight + ' ' + selectedValue);
+            console.log('weight: ' + weight + ' ' + units);
+            let weights : Number[] = convertWeight(units);
+            // Local.addEntry(weights[0], weights[1], date);
             router.back();
         }
     }
+
+    const convertWeight = (units : string): number[] =>{
+        let weights: number[] = [];
+        if(units === 'lbs'){
+            //convert to kgs
+            weights = [Number(weight), Number(weight) / 2.205];
+        }else{
+            //convert to lbs
+            weights = [Number(weight) / 2.205, Number(weight)];
+
+        }
+        return weights;
+    }
+
     return(
         <View style={styles.mainContainer}>
             <View style={styles.form}>
                 <View style={styles.formHeader}>
-                    <Text style={styles.headerText}>June 06, 2024</Text>
+                    <Text style={styles.headerText}>{date}</Text>
                 </View>
                 <View style={styles.formBody}>
                     <View style={styles.textInContainer}>
                         <TextInput
                             keyboardType='numeric'
-                            maxLength={3}
+                            maxLength={5}
                             onChangeText={onChangeWeight}
                             value={weight}
                             style= {
@@ -43,8 +73,8 @@ export default function recordWeight (){
                     </View>
 
                     <Picker
-                        selectedValue={selectedValue}
-                        onValueChange={(itemValue) => setSelectedValue(itemValue)}
+                        selectedValue={units}
+                        onValueChange={(itemValue) => setUnits(itemValue)}
                         style={styles.picker}
                         itemStyle={styles.pickerItem}
                     >

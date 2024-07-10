@@ -5,13 +5,16 @@ import {
   StyleSheet, 
   FlatList,
 } from "react-native";
+import { useEffect, useState } from "react";
 import {LineChart} from 'react-native-gifted-charts';
 import { useRouter } from "expo-router";
+import * as Local from '../LocalDB/InitializeLocal';
 
 export default function Index() {
   const router = useRouter();
 
   const data1=[ {value:50}, {value:80}, {value:90}, {value:70} ]
+  const [weights, setWeights] = useState([]);
   interface recordItem {
     weight: string;
     date: string;
@@ -21,6 +24,11 @@ export default function Index() {
     {weight: '120 lbs', date : 'Dec 28, 1968'},
     {weight: '180 lbs', date : 'Apr 13, 1996'},
   ];
+
+  useEffect(()=>{
+    Local.createTable();
+    // Local.fetchAllEntries(setWeights);
+  },[]);
 
   const renderItem = ({item} : {item : recordItem}) =>{
     return(
