@@ -23,27 +23,26 @@ export default function recordWeight (){
         setDate(formattedDate);
     },[])
 
-    const onRecord = () =>{
+    const onRecord = async () =>{
 
         if (weight === ''){
-            alert('Enter weight')
+            alert('Enter weight');
         }else{
             console.log('weight: ' + weight + ' ' + units);
             let weights : Number[] = convertWeight(units);
-            // Local.addEntry(weights[0], weights[1], date);
+            await Local.insertWeight(weights[0], weights[1], date);
             router.back();
         }
     }
 
     const convertWeight = (units : string): number[] =>{
-        let weights: number[] = [];
+        let weights: number[] = []; //[lbs, kgs]
         if(units === 'lbs'){
             //convert to kgs
-            weights = [Number(weight), Number(weight) / 2.205];
+            weights = [Number(weight), Number((Number(weight) / 2.205).toFixed(2))];
         }else{
             //convert to lbs
-            weights = [Number(weight) / 2.205, Number(weight)];
-
+            weights = [Number((Number(weight) / 2.205).toFixed(2)), Number(weight)];
         }
         return weights;
     }

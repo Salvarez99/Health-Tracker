@@ -5,35 +5,43 @@ import {
   StyleSheet, 
   FlatList,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {LineChart} from 'react-native-gifted-charts';
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import * as Local from '../LocalDB/InitializeLocal';
 
 export default function Index() {
   const router = useRouter();
 
   const data1=[ {value:50}, {value:80}, {value:90}, {value:70} ]
-  const [weights, setWeights] = useState([]);
+  const [weights, setWeights] = useState<recordItem[]>([]);
+  const [data, setData] = useState<recordItem[]>([]);
   interface recordItem {
-    weight: string;
+    id: number;
+    weight_lbs: number;
+    weight_kgs: number;
     date: string;
   }
-
-  let data: recordItem[] = [
-    {weight: '120 lbs', date : 'Dec 28, 1968'},
-    {weight: '180 lbs', date : 'Apr 13, 1996'},
-  ];
-
-  useEffect(()=>{
+  
+  const loadWeights = async () => {
+    const fetchedWeights = await Local.fetchWeights();
+    setData(fetchedWeights.reverse());
+  };
+  useEffect(() => {
     Local.createTable();
-    // Local.fetchAllEntries(setWeights);
-  },[]);
+    loadWeights();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadWeights();
+    },[])
+  );
 
   const renderItem = ({item} : {item : recordItem}) =>{
     return(
       <TouchableOpacity style={styles.itemContainer}>
-        <Text>{item.weight}</Text>
+        <Text>{item.weight_lbs}</Text>
         <Text>{item.date}</Text>
       </TouchableOpacity>
     );
