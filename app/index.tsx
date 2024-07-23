@@ -7,22 +7,26 @@ import {
 } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { LineChart } from "react-native-gifted-charts";
-import { useRouter, useFocusEffect } from "expo-router";
+import {
+  useRouter,
+  useFocusEffect,
+  useLocalSearchParams,
+  useGlobalSearchParams,
+} from "expo-router";
 import * as Local from "../LocalDB/InitializeLocal";
+import { useUnits } from "@/Components/UnitsContext";
+interface recordItem {
+  id: number;
+  weight_lbs: number;
+  weight_kgs: number;
+  date: string;
+}
 
 export default function Index() {
+  const { units } = useUnits();
   const router = useRouter();
-
-  const data1 = [{ value: 50 }, { value: 80 }, { value: 90 }, { value: 70 }];
   const [weights, setWeights] = useState<recordItem[]>([]);
   const [data, setData] = useState<recordItem[]>([]);
-  const units: string = "lbs";
-  interface recordItem {
-    id: number;
-    weight_lbs: number;
-    weight_kgs: number;
-    date: string;
-  }
 
   const loadWeights = async () => {
     const fetchedWeights = await Local.fetchWeights();
