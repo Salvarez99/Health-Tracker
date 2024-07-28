@@ -1,5 +1,5 @@
-import { UnitsProvider } from "@/Components/UnitsContext";
-import UnitsToggle from "@/Components/UnitsToggle";
+import { UnitsProvider } from "@/components/UnitsContext";
+import UnitsToggle from "@/components/UnitsToggle";
 import { Stack } from "expo-router";
 import { useState } from "react";
 
