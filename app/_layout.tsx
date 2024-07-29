@@ -19,6 +19,13 @@ export default function RootLayout() {
             headerStyle: {},
           }}
         />
+        <Stack.Screen
+          name="record/[id]"
+          options={{
+            title: "Record Weight",
+            headerStyle: {},
+          }}
+        />
       </Stack>
     </UnitsProvider>
   );

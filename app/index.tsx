@@ -4,17 +4,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  ListRenderItem,
 } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { LineChart } from "react-native-gifted-charts";
 import {
   useRouter,
   useFocusEffect,
-  useLocalSearchParams,
-  useGlobalSearchParams,
 } from "expo-router";
 import * as Local from "../LocalDB/InitializeLocal";
-import { useUnits } from "@/Components/UnitsContext";
+import { useUnits } from "@/components/UnitsContext";
 interface recordItem {
   id: number;
   weight_lbs: number;
@@ -43,9 +42,20 @@ export default function Index() {
     }, [])
   );
 
-  const renderItem = ({ item }: { item: recordItem }) => {
+  const onItemPress = (item : recordItem) => {
+    console.log(`id: ${item.id} | date: ${item.date}`)
+    router.push({
+      pathname: `/record/[id]`,
+      params : {date : item.date},
+      });
+  }
+
+  const renderItem : ListRenderItem<recordItem> = ({ item }) => {
     return (
-      <TouchableOpacity style={styles.itemContainer}>
+      <TouchableOpacity 
+        style={styles.itemContainer}
+        onPress={() => onItemPress(item)}
+        >
         <Text>
           {units === "lbs"
             ? `${item.weight_lbs} lbs`
@@ -62,7 +72,11 @@ export default function Index() {
         <LineChart width={320} height={260} />
       </View>
       <View style={styles.recordsView}>
-        <FlatList data={data} renderItem={renderItem} />
+        <FlatList 
+        data={data} 
+        renderItem={renderItem}
+        keyExtractor={item => item.id.toString()}
+        />
       </View>
       <View style={styles.footer}>
         <TouchableOpacity
