@@ -27,6 +27,26 @@ export const createTable = async () => {
   }
 };
 
+export const fetchWeightsByUnits = async (units) => {
+  try {
+    let result = null; // Declare result as a variable (let) instead of a constant (const)
+
+    if (units === "lbs") {
+      result = await db.getAllAsync("SELECT weight_lbs, date FROM weights"); 
+      console.log("Fetched lbs");
+    } else {
+      result = await db.getAllAsync("SELECT weight_kgs, date FROM weights"); 
+      console.log("Fetched kgs");
+    }
+
+    return result || [];
+  } catch (e) {
+    console.error(`Error fetching ${units}`, e);
+    return [];
+  }
+};
+
+
 export const dateExist = async (date) => {
   try {
     const result = await db.getFirstAsync(

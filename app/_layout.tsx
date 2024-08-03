@@ -1,7 +1,6 @@
 import { UnitsProvider } from "@/components/UnitsContext";
 import UnitsToggle from "@/components/UnitsToggle";
 import { Stack } from "expo-router";
-import { useState } from "react";
 
 export default function RootLayout() {
 
