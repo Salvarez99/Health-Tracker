@@ -12,14 +12,7 @@ export default function RootLayout() {
           options={{ headerRight: () => <UnitsToggle /> }}
         />
         <Stack.Screen
-          name="recordWeight"
-          options={{
-            title: "Record Weight",
-            headerStyle: {},
-          }}
-        />
-        <Stack.Screen
-          name="record/[id]"
+          name="record/[date]"
           options={{
             title: "Record Weight",
             headerStyle: {},

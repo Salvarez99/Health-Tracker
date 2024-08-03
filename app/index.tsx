@@ -7,34 +7,50 @@ import {
   ListRenderItem,
 } from "react-native";
 import { useCallback, useEffect, useState } from "react";
-import { LineChart } from "react-native-gifted-charts";
-import {
-  useRouter,
-  useFocusEffect,
-} from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import * as Local from "../LocalDB/InitializeLocal";
 import { useUnits } from "@/components/UnitsContext";
+import WeightGraph from "@/components/WeightGraph";
 interface recordItem {
   id: number;
   weight_lbs: number;
   weight_kgs: number;
   date: string;
 }
+interface DataPoint {
+  label: string;
+  value: number;
+}
 
 export default function Index() {
   const { units } = useUnits();
   const router = useRouter();
-  const [weights, setWeights] = useState<recordItem[]>([]);
-  const [data, setData] = useState<recordItem[]>([]);
+  const [graphData, setGraphData] = useState<DataPoint[]>([]);
+  const [ListData, setlistData] = useState<recordItem[]>([]);
+  const [updated, isUpdated] = useState(false);
+  const [date, setDate] = useState("");
 
   const loadWeights = async () => {
     const fetchedWeights = await Local.fetchWeights();
-    setData(fetchedWeights.reverse());
+    setlistData(fetchedWeights.reverse());
   };
+
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    };
+    const formattedDate = currentDate.toLocaleDateString("en-US", options);
+    setDate(formattedDate);
+  };
+
   useEffect(() => {
     Local.createTable();
     loadWeights();
-  }, []);
+    getCurrentDate();
+  }, [updated]);
 
   useFocusEffect(
     useCallback(() => {
@@ -42,20 +58,22 @@ export default function Index() {
     }, [])
   );
 
-  const onItemPress = (item : recordItem) => {
-    console.log(`id: ${item.id} | date: ${item.date}`)
+  const onItemPress = (item: recordItem) => {
+    console.log(`id: ${item.id} | date: ${item.date}`);
     router.push({
-      pathname: `/record/[id]`,
-      params : {date : item.date},
-      });
-  }
+      pathname: "/record/[date]",
+      params: {
+        date: item.date,
+      },
+    });
+  };
 
-  const renderItem : ListRenderItem<recordItem> = ({ item }) => {
+  const renderItem: ListRenderItem<recordItem> = ({ item }) => {
     return (
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.itemContainer}
         onPress={() => onItemPress(item)}
-        >
+      >
         <Text>
           {units === "lbs"
             ? `${item.weight_lbs} lbs`
@@ -68,20 +86,23 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.chartView}>
-        <LineChart width={320} height={260} />
-      </View>
+      {/* <WeightGraph data={null} /> */}
       <View style={styles.recordsView}>
-        <FlatList 
-        data={data} 
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
+        <FlatList
+          data={ListData}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
         />
       </View>
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.recordButton}
-          onPress={() => router.push("recordWeight")}
+          onPress={() =>
+            router.push({
+              pathname: "/record/[date]",
+              params: { date: date },
+            })
+          }
         >
           <Text style={styles.buttonText}> Record Weight </Text>
         </TouchableOpacity>

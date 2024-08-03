@@ -8,11 +8,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import * as Local from "../LocalDB/InitializeLocal";
+import * as Local from "../../LocalDB/InitializeLocal";
 
 export default function recordWeight() {
   const router = useRouter();
-  const {item_id, item_date} = useLocalSearchParams();
+  const {date : item_date} = useLocalSearchParams();
   const [units, setUnits] = useState("lbs");
   const [weight, onChangeWeight] = useState("");
   const [date, setDate] = useState("");
