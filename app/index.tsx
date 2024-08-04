@@ -11,28 +11,29 @@ import { useRouter, useFocusEffect } from "expo-router";
 import * as Local from "../LocalDB/InitializeLocal";
 import { useUnits } from "@/components/UnitsContext";
 import WeightGraph from "@/components/WeightGraph";
-interface recordItem {
-  id: number;
-  weight_lbs: number;
-  weight_kgs: number;
-  date: string;
-}
-interface DataPoint {
-  label: string;
-  value: number;
-}
+import { DataPoint } from "@/Interfaces/ints";
+import { recordItem } from "@/Interfaces/ints";
 
 export default function Index() {
   const { units } = useUnits();
   const router = useRouter();
-  const [graphData, setGraphData] = useState<DataPoint[]>([]);
-  const [ListData, setlistData] = useState<recordItem[]>([]);
-  const [updated, isUpdated] = useState(false);
   const [date, setDate] = useState("");
+  const [updated, isUpdated] = useState(false);
+  const [graphData, setGraphData] = useState<DataPoint[]>([]);
+  const [listData, setlistData] = useState<recordItem[]>([]);
 
   const loadWeights = async () => {
     const fetchedWeights = await Local.fetchWeights();
-    setlistData(fetchedWeights.reverse());
+    const reversedWeights = fetchedWeights.reverse();
+
+    const dataPoints: DataPoint[] = fetchedWeights.map((item) => ({
+      label: item.date,
+      value: item.weight_lbs,
+    }));
+
+    setlistData(reversedWeights);
+    setGraphData(dataPoints);
+    // console.log(fetchedWeights);
   };
 
   const getCurrentDate = () => {
@@ -46,15 +47,24 @@ export default function Index() {
     setDate(formattedDate);
   };
 
+  //Run once when mounted
   useEffect(() => {
+    // Local.dropTable();
     Local.createTable();
     loadWeights();
     getCurrentDate();
-  }, [updated]);
+  }, []);
 
+  // //Run when updated is changed
+  // useEffect(()=>{
+  //   loadWeights();
+  // }, [updated]);
+
+  //Run when in focus
   useFocusEffect(
     useCallback(() => {
       loadWeights();
+      getCurrentDate();
     }, [])
   );
 
@@ -86,10 +96,10 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      {/* <WeightGraph data={null} /> */}
+      <WeightGraph data={graphData} />
       <View style={styles.recordsView}>
         <FlatList
-          data={ListData}
+          data={listData}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
         />
@@ -115,14 +125,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-  },
-  chartView: {
-    flex: 5,
-    backgroundColor: "#ffff",
-    borderBottomWidth: 1,
-    elevation: 5,
-    paddingTop: 10,
-    paddingLeft: 5,
   },
   recordsView: {
     flex: 6,

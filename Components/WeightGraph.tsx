@@ -1,11 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
-
-interface DataPoint {
-  label: string;
-  value: number;
-}
+import { DataPoint } from "@/Interfaces/ints";
 
 interface props {
   data: DataPoint[];
@@ -13,21 +9,21 @@ interface props {
 
 const WeightGraph: React.FC<props> = ({ data }) => {
   React.useEffect(() => {
-    const weightData = data.map((item) => ({
-      value: item.value,
-      label: item.label,
-    }));
-    // console.log(weightData);
+    // const weightData = data.map((item) => ({
+    //   value: item.value,
+    //   label: item.label,
+    // }));
+    // console.log(data);
   }, [data]);
 
   return (
     <View style={styles.chartView}>
       <LineChart
-        width={320}
+        width={360}
         height={240}
         initialSpacing={0}
         data={data.reverse()}
-        spacing={110}
+        spacing={100}
         hideDataPoints
         thickness={5}
         hideRules

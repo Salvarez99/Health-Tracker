@@ -12,28 +12,16 @@ import * as Local from "../../LocalDB/InitializeLocal";
 
 export default function recordWeight() {
   const router = useRouter();
-  const {date : item_date} = useLocalSearchParams();
+  const { date: item_date } = useLocalSearchParams();
   const [units, setUnits] = useState("lbs");
   const [weight, onChangeWeight] = useState("");
   const [date, setDate] = useState("");
 
-  //Formats and set's current day as string
   useEffect(() => {
-    const currentDate = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    };
-    const formattedDate = currentDate.toLocaleDateString("en-US", options);
-    setDate(formattedDate);
-
     if (item_date) {
       setDate(item_date as string);
     }
   }, []);
-
- 
 
   const onRecord = async () => {
     if (weight === "") {
