@@ -11,14 +11,12 @@ import { useRouter, useFocusEffect } from "expo-router";
 import * as Local from "../LocalDB/InitializeLocal";
 import { useUnits } from "@/components/UnitsContext";
 import WeightGraph from "@/components/WeightGraph";
-import { DataPoint } from "@/Interfaces/ints";
-import { recordItem } from "@/Interfaces/ints";
+import { DataPoint, recordItem } from "@/types/ints";
 
 export default function Index() {
-  const { units } = useUnits();
   const router = useRouter();
+  const { units } = useUnits();
   const [date, setDate] = useState("");
-  const [updated, isUpdated] = useState(false);
   const [graphData, setGraphData] = useState<DataPoint[]>([]);
   const [listData, setlistData] = useState<recordItem[]>([]);
 
@@ -49,16 +47,11 @@ export default function Index() {
 
   //Run once when mounted
   useEffect(() => {
-    // Local.dropTable();
     Local.createTable();
     loadWeights();
     getCurrentDate();
   }, []);
 
-  // //Run when updated is changed
-  // useEffect(()=>{
-  //   loadWeights();
-  // }, [updated]);
 
   //Run when in focus
   useFocusEffect(

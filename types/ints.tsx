@@ -1,9 +1,9 @@
-export interface DataPoint {
+export type DataPoint = {
   label: string;
   value: number;
 }
 
-export interface recordItem {
+export type recordItem = {
   id: number;
   weight_lbs: number;
   weight_kgs: number;

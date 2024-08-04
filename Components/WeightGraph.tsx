@@ -1,21 +1,14 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
-import { DataPoint } from "@/Interfaces/ints";
+import { DataPoint } from "@/types/ints";
 
-interface props {
+type props = {
   data: DataPoint[];
-}
+};
 
 const WeightGraph: React.FC<props> = ({ data }) => {
-  React.useEffect(() => {
-    // const weightData = data.map((item) => ({
-    //   value: item.value,
-    //   label: item.label,
-    // }));
-    // console.log(data);
-  }, [data]);
-
+ 
   return (
     <View style={styles.chartView}>
       <LineChart
