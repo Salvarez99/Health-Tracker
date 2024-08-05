@@ -1,4 +1,6 @@
-export const lightTheme = {
+import { typeTheme } from "@/types/typeTheme";
+
+export const lightTheme : typeTheme = {
   isDark: false,
   colors: {
     textColor: "",

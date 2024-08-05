@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import * as Local from "../../LocalDB/InitializeLocal";
+import * as Local from "../../localDB/InitializeLocal";
 
 export default function recordWeight() {
   const router = useRouter();

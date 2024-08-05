@@ -1,12 +1,14 @@
-export const darkTheme = {
+import { typeTheme } from "@/types/typeTheme";
+
+export const darkTheme: typeTheme = {
   isDark: true,
   colors: {
-    textColor:"#ffffff",
+    textColor: "#ffffff",
     backgroundColor: "#3b3b4e",
-    headerColor : "#62627a",
-    chartBackgroundColor : "#525050",
+    headerColor: "#62627a",
+    chartBackgroundColor: "#525050",
     axisColor: "#304680",
     chartLineColor: "#4b8d8e",
-    footerColor : "#d19090",
+    footerColor: "#d19090",
   },
 };

@@ -6,12 +6,13 @@ import {
   FlatList,
   ListRenderItem,
 } from "react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useContext } from "react";
 import { useRouter, useFocusEffect } from "expo-router";
-import * as Local from "../LocalDB/InitializeLocal";
+import * as Local from "../localDB/InitializeLocal";
 import { useUnits } from "@/components/UnitsContext";
 import WeightGraph from "@/components/WeightGraph";
 import { DataPoint, recordItem } from "@/types/ints";
+import { ThemeContext } from "@/contexts/ThemeContext";
 
 export default function Index() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function Index() {
   const [date, setDate] = useState("");
   const [graphData, setGraphData] = useState<DataPoint[]>([]);
   const [listData, setlistData] = useState<recordItem[]>([]);
+  const theme = useContext(ThemeContext);
 
   const loadWeights = async () => {
     const fetchedWeights = await Local.fetchWeights();
@@ -51,7 +53,6 @@ export default function Index() {
     loadWeights();
     getCurrentDate();
   }, []);
-
 
   //Run when in focus
   useFocusEffect(
@@ -99,7 +100,7 @@ export default function Index() {
       </View>
       <View style={styles.footer}>
         <TouchableOpacity
-          style={styles.recordButton}
+          style={[styles.recordButton, {backgroundColor : theme.colors.axisColor}]}
           onPress={() =>
             router.push({
               pathname: "/record/[date]",
@@ -115,6 +116,7 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     justifyContent: "center",
