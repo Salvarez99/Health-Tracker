@@ -91,7 +91,7 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <WeightGraph data={graphData} />
-      <View style={[styles.recordsView, {backgroundColor : theme.colors.primary}]}>
+      <View style={[styles.recordsView, {backgroundColor : theme.colors.backgroundColor}]}>
         <FlatList
           data={listData}
           renderItem={renderItem}
@@ -109,7 +109,7 @@ export default function Index() {
             })
           }
         >
-          <Text style={[styles.buttonText, {color : theme.colors.textColor}]}> Record Weight </Text>
+          <Text style={[styles.buttonText, {color : theme.colors.backgroundColor}]}> Record Weight </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 5,
+    elevation: 3,
   },
   buttonText: {
     color: "#FFFFFF",

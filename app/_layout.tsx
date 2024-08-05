@@ -12,6 +12,7 @@ export default function RootLayout() {
 
   const headerStyle = {
     backgroundColor: theme.colors.headerColor,
+    elevation: 10,
   };
 
   const headerTitleStyle = {
@@ -26,6 +27,7 @@ export default function RootLayout() {
             name="index"
             options={{
               headerRight: () => <UnitsToggle />,
+              title: "Index",
               headerStyle: headerStyle,
               headerTitleStyle: headerTitleStyle,
             }}

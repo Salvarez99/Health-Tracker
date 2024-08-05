@@ -34,6 +34,7 @@ const WeightGraph: React.FC<props> = ({ data }) => {
         verticalLinesColor={theme.colors.chartLineColor}
         xAxisColor={theme.colors.axisColor}
         color={theme.colors.chartLineColor}
+        
       />
     </View>
   );
@@ -42,8 +43,6 @@ const WeightGraph: React.FC<props> = ({ data }) => {
 const styles = StyleSheet.create({
   chartView: {
     flex: 5,
-    backgroundColor: "aquamarine",
-    borderBottomWidth: 1,
     elevation: 5,
     paddingTop: 10,
     paddingLeft: 5,
