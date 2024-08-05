@@ -4,21 +4,38 @@ import { Stack } from "expo-router";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import { darkTheme } from "@/themes/DarkTheme";
 import { lightTheme } from "@/themes/LightTheme";
+import { useState } from "react";
 
 export default function RootLayout() {
+  const [isDark, setIsDark] = useState(true);
+  const theme = isDark ? darkTheme : lightTheme;
+
+  const headerStyle = {
+    backgroundColor: theme.colors.headerColor,
+  };
+
+  const headerTitleStyle = {
+    color: theme.colors.textColor,
+  };
+
   return (
     <UnitsProvider>
-      <ThemeContext.Provider value={darkTheme}>
+      <ThemeContext.Provider value={theme}>
         <Stack>
           <Stack.Screen
             name="index"
-            options={{ headerRight: () => <UnitsToggle /> }}
+            options={{
+              headerRight: () => <UnitsToggle />,
+              headerStyle: headerStyle,
+              headerTitleStyle: headerTitleStyle,
+            }}
           />
           <Stack.Screen
             name="record/[date]"
             options={{
               title: "Record Weight",
-              headerStyle: {},
+              headerStyle: headerStyle,
+              headerTitleStyle: headerTitleStyle,
             }}
           />
         </Stack>

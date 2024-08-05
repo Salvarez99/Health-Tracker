@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import * as Local from "../../localDB/InitializeLocal";
+import { ThemeContext } from "@/contexts/ThemeContext";
 
 export default function recordWeight() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function recordWeight() {
   const [units, setUnits] = useState("lbs");
   const [weight, onChangeWeight] = useState("");
   const [date, setDate] = useState("");
+  const theme = useContext(ThemeContext);
 
   useEffect(() => {
     if (item_date) {
@@ -51,13 +53,13 @@ export default function recordWeight() {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, {backgroundColor : theme.colors.backgroundColor}]}>
       <View style={styles.form}>
-        <View style={styles.formHeader}>
-          <Text style={styles.headerText}>{date}</Text>
+        <View style={[styles.formHeader, {backgroundColor : theme.colors.headerColor}]}>
+          <Text style={[styles.headerText, , {color : theme.colors.textColor}]}>{date}</Text>
         </View>
-        <View style={styles.formBody}>
-          <View style={styles.textInContainer}>
+        <View style={[styles.formBody, {backgroundColor : theme.colors.backgroundColor}]}>
+          <View style={[styles.textInContainer, {backgroundColor : theme.colors.chartBackgroundColor}]}>
             <TextInput
               keyboardType="numeric"
               maxLength={5}
@@ -75,15 +77,15 @@ export default function recordWeight() {
           <Picker
             selectedValue={units}
             onValueChange={(itemValue) => setUnits(itemValue)}
-            style={styles.picker}
+            style={[styles.picker, {color : theme.colors.textColor}]}
             itemStyle={styles.pickerItem}
           >
             <Picker.Item label="lbs" value="lbs" />
             <Picker.Item label="kgs" value="kgs" />
           </Picker>
 
-          <TouchableOpacity style={styles.recordButton} onPress={onRecord}>
-            <Text style={styles.recordText}>Record</Text>
+          <TouchableOpacity style={[styles.recordButton, {backgroundColor : theme.colors.buttonColor}]} onPress={onRecord}>
+            <Text style={[styles.recordText, {color : theme.colors.textColor}]}>Record</Text>
           </TouchableOpacity>
         </View>
       </View>

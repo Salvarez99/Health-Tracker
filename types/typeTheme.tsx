@@ -1,6 +1,8 @@
 export type typeTheme = {
   isDark: boolean;
   colors: {
+    primary: string;
+    secondary: string;
     textColor: string;
     backgroundColor: string;
     headerColor: string;
@@ -8,5 +10,6 @@ export type typeTheme = {
     axisColor: string;
     chartLineColor: string;
     footerColor: string;
+    buttonColor: string;
   };
 };

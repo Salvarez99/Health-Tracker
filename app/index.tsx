@@ -78,12 +78,12 @@ export default function Index() {
         style={styles.itemContainer}
         onPress={() => onItemPress(item)}
       >
-        <Text>
+        <Text style={ {color : theme.colors.textColor}}>
           {units === "lbs"
             ? `${item.weight_lbs} lbs`
             : `${item.weight_kgs} kgs`}
         </Text>
-        <Text>{item.date}</Text>
+        <Text style={ {color : theme.colors.textColor}}>{item.date}</Text>
       </TouchableOpacity>
     );
   };
@@ -91,16 +91,16 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <WeightGraph data={graphData} />
-      <View style={styles.recordsView}>
+      <View style={[styles.recordsView, {backgroundColor : theme.colors.backgroundColor}]}>
         <FlatList
           data={listData}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
         />
       </View>
-      <View style={styles.footer}>
+      <View style={[styles.footer, {backgroundColor : theme.colors.footerColor}]}>
         <TouchableOpacity
-          style={[styles.recordButton, {backgroundColor : theme.colors.axisColor}]}
+          style={[styles.recordButton, {backgroundColor : theme.colors.buttonColor}]}
           onPress={() =>
             router.push({
               pathname: "/record/[date]",
@@ -108,7 +108,7 @@ export default function Index() {
             })
           }
         >
-          <Text style={styles.buttonText}> Record Weight </Text>
+          <Text style={[styles.buttonText, {color : theme.colors.textColor}]}> Record Weight </Text>
         </TouchableOpacity>
       </View>
     </View>
