@@ -19,8 +19,8 @@ export default function RootLayout() {
   };
 
   return (
-    <UnitsProvider>
-      <ThemeContext.Provider value={theme}>
+    <ThemeContext.Provider value={theme}>
+      <UnitsProvider>
         <Stack>
           <Stack.Screen
             name="index"
@@ -39,7 +39,7 @@ export default function RootLayout() {
             }}
           />
         </Stack>
-      </ThemeContext.Provider>
-    </UnitsProvider>
+      </UnitsProvider>
+    </ThemeContext.Provider>
   );
 }

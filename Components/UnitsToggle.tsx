@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { View, Text, Switch, StyleSheet } from "react-native";
 import { useUnits } from "./UnitsContext";
+import { ThemeContext } from "@/contexts/ThemeContext";
 
 export default function UnitsToggle() {
-  const {units, setUnits} = useUnits();
-  const isEnabled = units === 'kgs';
+  const { units, setUnits } = useUnits();
+  const isEnabled = units === "kgs";
+  const theme = useContext(ThemeContext);
 
   const toggleSwitch = () => {
     const newUnits = isEnabled ? "lbs" : "kgs";
     setUnits(newUnits);
   };
 
+  const textColor = { color: theme.colors.textColor };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>lbs</Text>
+      <Text style={[styles.text, textColor]}>lbs</Text>
       <Switch
         trackColor={{ false: "#767577", true: "#81b0ff" }}
         thumbColor="#f4f3f4"
@@ -22,7 +26,7 @@ export default function UnitsToggle() {
         value={isEnabled}
         style={styles.switch}
       />
-      <Text style={styles.text}>kgs</Text>
+      <Text style={[styles.text, textColor]}>kgs</Text>
     </View>
   );
 }

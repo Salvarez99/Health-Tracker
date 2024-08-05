@@ -53,39 +53,76 @@ export default function recordWeight() {
   };
 
   return (
-    <View style={[styles.mainContainer, {backgroundColor : theme.colors.backgroundColor}]}>
+    <View
+      style={[
+        styles.mainContainer,
+        { backgroundColor: theme.colors.backgroundColor },
+      ]}
+    >
       <View style={styles.form}>
-        <View style={[styles.formHeader, {backgroundColor : theme.colors.headerColor}]}>
-          <Text style={[styles.headerText, , {color : theme.colors.textColor}]}>{date}</Text>
+        <View
+          style={[
+            styles.formHeader,
+            { backgroundColor: theme.colors.headerColor },
+          ]}
+        >
+          <Text
+            style={[styles.headerText, , { color: theme.colors.textColor }]}
+          >
+            {date}
+          </Text>
         </View>
-        <View style={[styles.formBody, {backgroundColor : theme.colors.backgroundColor}]}>
-          <View style={[styles.textInContainer, {backgroundColor : theme.colors.chartBackgroundColor}]}>
+        <View
+          style={[
+            styles.formBody,
+            { backgroundColor: theme.colors.backgroundColor },
+          ]}
+        >
+          <View
+            style={[
+              styles.textInContainer,
+              { backgroundColor: theme.colors.secondary },
+            ]}
+          >
             <TextInput
               keyboardType="numeric"
               maxLength={5}
               onChangeText={onChangeWeight}
               value={weight}
-              style={{
-                flex: 1,
-                textAlign: "center",
-                textAlignVertical: "center",
-                fontSize: 16,
-              }}
+              style={[
+                {
+                  flex: 1,
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 16,
+                },
+                { color: theme.colors.textColor },
+              ]}
             />
           </View>
 
           <Picker
             selectedValue={units}
             onValueChange={(itemValue) => setUnits(itemValue)}
-            style={[styles.picker, {color : theme.colors.textColor}]}
+            style={[styles.picker, { color: theme.colors.textColor }]}
             itemStyle={styles.pickerItem}
           >
             <Picker.Item label="lbs" value="lbs" />
             <Picker.Item label="kgs" value="kgs" />
           </Picker>
 
-          <TouchableOpacity style={[styles.recordButton, {backgroundColor : theme.colors.buttonColor}]} onPress={onRecord}>
-            <Text style={[styles.recordText, {color : theme.colors.textColor}]}>Record</Text>
+          <TouchableOpacity
+            style={[
+              styles.recordButton,
+              { backgroundColor: theme.colors.buttonColor },
+            ]}
+            onPress={onRecord}
+          >
+            <Text
+              style={[styles.recordText, { color: theme.colors.textColor }]}
+            >
+              Record
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

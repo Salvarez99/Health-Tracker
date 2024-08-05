@@ -75,7 +75,7 @@ export default function Index() {
   const renderItem: ListRenderItem<recordItem> = ({ item }) => {
     return (
       <TouchableOpacity
-        style={styles.itemContainer}
+        style={[styles.itemContainer, {backgroundColor : theme.colors.secondary}]}
         onPress={() => onItemPress(item)}
       >
         <Text style={ {color : theme.colors.textColor}}>
@@ -91,11 +91,12 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <WeightGraph data={graphData} />
-      <View style={[styles.recordsView, {backgroundColor : theme.colors.backgroundColor}]}>
+      <View style={[styles.recordsView, {backgroundColor : theme.colors.primary}]}>
         <FlatList
           data={listData}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={true}
         />
       </View>
       <View style={[styles.footer, {backgroundColor : theme.colors.footerColor}]}>
@@ -144,9 +145,11 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   itemContainer: {
-    padding: 17,
-    borderBottomWidth: 1,
+    padding: 15,
     flexDirection: "row",
     justifyContent: "space-between",
+    elevation : 5,
+    borderRadius : 5,
+    margin : 4,
   },
 });

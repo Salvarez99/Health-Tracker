@@ -2,15 +2,24 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 import { DataPoint } from "@/types/ints";
+import { ThemeContext } from "@/contexts/ThemeContext";
 
 type props = {
   data: DataPoint[];
 };
 
 const WeightGraph: React.FC<props> = ({ data }) => {
- 
+  const theme = React.useContext(ThemeContext);
+
   return (
-    <View style={styles.chartView}>
+    <View
+      style={[
+        styles.chartView,
+        { backgroundColor: theme.colors.chartBackgroundColor,
+
+         },
+      ]}
+    >
       <LineChart
         width={360}
         height={240}
@@ -20,11 +29,11 @@ const WeightGraph: React.FC<props> = ({ data }) => {
         hideDataPoints
         thickness={5}
         hideRules
-        yAxisColor="#0BA5A4"
+        yAxisColor={theme.colors.axisColor}
         showVerticalLines
-        verticalLinesColor="rgba(14,164,164,0.5)"
-        xAxisColor="#0BA5A4"
-        color="#0BA5A4"
+        verticalLinesColor={theme.colors.chartLineColor}
+        xAxisColor={theme.colors.axisColor}
+        color={theme.colors.chartLineColor}
       />
     </View>
   );
