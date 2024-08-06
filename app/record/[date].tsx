@@ -73,10 +73,7 @@ export default function recordWeight() {
           </Text>
         </View>
         <View
-          style={[
-            styles.formBody,
-            { backgroundColor: theme.colors.backgroundColor },
-          ]}
+          style={[styles.formBody, { backgroundColor: theme.colors.secondary }]}
         >
           <View
             style={[

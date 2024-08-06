@@ -11,5 +11,11 @@ export type typeTheme = {
     chartLineColor: string;
     footerColor: string;
     buttonColor: string;
-  };
+  },
+  chartColors : {
+
+  },
+  screenColors: {
+    
+  }
 };

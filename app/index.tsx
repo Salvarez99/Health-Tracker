@@ -13,6 +13,7 @@ import { useUnits } from "@/components/UnitsContext";
 import WeightGraph from "@/components/WeightGraph";
 import { DataPoint, recordItem } from "@/types/ints";
 import { ThemeContext } from "@/contexts/ThemeContext";
+import { months } from "@/constants/months";
 
 export default function Index() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function Index() {
     const reversedWeights = fetchedWeights.reverse();
 
     const dataPoints: DataPoint[] = fetchedWeights.map((item) => ({
-      label: item.date,
+      label: convertDateString(item.date),
       value: item.weight_lbs,
     }));
 
@@ -46,6 +47,13 @@ export default function Index() {
     const formattedDate = currentDate.toLocaleDateString("en-US", options);
     setDate(formattedDate);
   };
+
+  function convertDateString(dateString: string) {
+    let [month, day, year]: string[] = dateString.split(" ");
+    const monthNum = months[month];
+    day = day.replace(",", "");
+    return `${monthNum} / ${day}`;
+  }
 
   //Run once when mounted
   useEffect(() => {
@@ -75,15 +83,18 @@ export default function Index() {
   const renderItem: ListRenderItem<recordItem> = ({ item }) => {
     return (
       <TouchableOpacity
-        style={[styles.itemContainer, {backgroundColor : theme.colors.secondary}]}
+        style={[
+          styles.itemContainer,
+          { backgroundColor: theme.colors.secondary },
+        ]}
         onPress={() => onItemPress(item)}
       >
-        <Text style={ {color : theme.colors.textColor}}>
+        <Text style={{ color: theme.colors.textColor }}>
           {units === "lbs"
             ? `${item.weight_lbs} lbs`
             : `${item.weight_kgs} kgs`}
         </Text>
-        <Text style={ {color : theme.colors.textColor}}>{item.date}</Text>
+        <Text style={{ color: theme.colors.textColor }}>{item.date}</Text>
       </TouchableOpacity>
     );
   };
@@ -91,7 +102,12 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <WeightGraph data={graphData} />
-      <View style={[styles.recordsView, {backgroundColor : theme.colors.backgroundColor}]}>
+      <View
+        style={[
+          styles.recordsView,
+          { backgroundColor: theme.colors.backgroundColor },
+        ]}
+      >
         <FlatList
           data={listData}
           renderItem={renderItem}
@@ -99,9 +115,14 @@ export default function Index() {
           showsVerticalScrollIndicator={true}
         />
       </View>
-      <View style={[styles.footer, {backgroundColor : theme.colors.footerColor}]}>
+      <View
+        style={[styles.footer, { backgroundColor: theme.colors.footerColor }]}
+      >
         <TouchableOpacity
-          style={[styles.recordButton, {backgroundColor : theme.colors.buttonColor}]}
+          style={[
+            styles.recordButton,
+            { backgroundColor: theme.colors.buttonColor },
+          ]}
           onPress={() =>
             router.push({
               pathname: "/record/[date]",
@@ -109,7 +130,10 @@ export default function Index() {
             })
           }
         >
-          <Text style={[styles.buttonText, {color : theme.colors.textColor}]}> Record Weight </Text>
+          <Text style={[styles.buttonText, { color: theme.colors.textColor }]}>
+            {" "}
+            Record Weight{" "}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -117,7 +141,6 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  
   container: {
     flex: 1,
     justifyContent: "center",
@@ -148,8 +171,8 @@ const styles = StyleSheet.create({
     padding: 15,
     flexDirection: "row",
     justifyContent: "space-between",
-    elevation : 5,
-    borderRadius : 5,
-    margin : 4,
+    elevation: 5,
+    borderRadius: 5,
+    margin: 4,
   },
 });
