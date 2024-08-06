@@ -7,7 +7,7 @@ import { lightTheme } from "@/themes/LightTheme";
 import { useState } from "react";
 
 export default function RootLayout() {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const theme = isDark ? darkTheme : lightTheme;
 
   const headerStyle = {

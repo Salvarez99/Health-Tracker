@@ -119,7 +119,7 @@ export default function recordWeight() {
             onPress={onRecord}
           >
             <Text
-              style={[styles.recordText, { color: theme.colors.secondary }]}
+              style={[styles.recordText, { color: theme.colors.textColor }]}
             >
               Record
             </Text>

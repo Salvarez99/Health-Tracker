@@ -109,7 +109,7 @@ export default function Index() {
             })
           }
         >
-          <Text style={[styles.buttonText, {color : theme.colors.backgroundColor}]}> Record Weight </Text>
+          <Text style={[styles.buttonText, {color : theme.colors.textColor}]}> Record Weight </Text>
         </TouchableOpacity>
       </View>
     </View>
