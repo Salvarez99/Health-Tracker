@@ -29,12 +29,12 @@ export default function Index() {
 
     const dataPoints: DataPoint[] = fetchedWeights.map((item) => ({
       label: convertDateString(item.date),
-      value: item.weight_lbs,
+      value: units === "lbs" ? item.weight_lbs : item.weight_kgs,
     }));
 
     setlistData(reversedWeights);
     setGraphData(dataPoints);
-    // console.log(fetchedWeights);
+    // console.log(dataPoints);
   };
 
   const getCurrentDate = () => {
@@ -48,7 +48,7 @@ export default function Index() {
     Local.createTable();
     loadWeights();
     getCurrentDate();
-  }, []);
+  }, [units]);
 
   //Run when in focus
   useFocusEffect(
@@ -103,9 +103,7 @@ export default function Index() {
           showsVerticalScrollIndicator={true}
         />
       </View>
-      <View
-        style={[styles.footer, { backgroundColor: theme.colors.tertiary }]}
-      >
+      <View style={[styles.footer, { backgroundColor: theme.colors.tertiary }]}>
         <TouchableOpacity
           style={[
             styles.recordButton,

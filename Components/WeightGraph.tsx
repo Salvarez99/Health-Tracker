@@ -21,7 +21,8 @@ const WeightGraph: React.FC<props> = ({ data }) => {
       <LineChart
         areaChart
         initialSpacing={0}
-        width={350}
+        spacing={80}
+        width={390}
         data={data.reverse()}
         hideRules={false}
         // isAnimated={true}
@@ -44,9 +45,6 @@ const WeightGraph: React.FC<props> = ({ data }) => {
     </View>
   );
 };
-/*
-Find equation for spacing so that it shows all information in space of view
-*/
 
 const styles = StyleSheet.create({
   chartView: {
