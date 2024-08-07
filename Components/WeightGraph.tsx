@@ -21,7 +21,7 @@ const WeightGraph: React.FC<props> = ({ data }) => {
       <LineChart
         areaChart
         initialSpacing={0}
-        width={305}
+        width={350}
         data={data.reverse()}
         hideRules={false}
         // isAnimated={true}
@@ -38,7 +38,7 @@ const WeightGraph: React.FC<props> = ({ data }) => {
         rulesType={"solid"}
         yAxisTextStyle={{color : theme.colors.textColor}}
         // xAxisIndicesColor={theme.colors.textColor}
-        xAxisLabelTextStyle={{color : theme.colors.textColor, f : 22}}
+        xAxisLabelTextStyle={{color : theme.colors.textColor}}
         
       />
     </View>

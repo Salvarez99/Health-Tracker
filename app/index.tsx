@@ -13,7 +13,7 @@ import { useUnits } from "@/components/UnitsContext";
 import WeightGraph from "@/components/WeightGraph";
 import { DataPoint, recordItem } from "@/types/ints";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import { months } from "@/constants/months";
+import { convertDateString, formatDate } from "@/Helpers/helpers";
 
 export default function Index() {
   const router = useRouter();
@@ -39,21 +39,9 @@ export default function Index() {
 
   const getCurrentDate = () => {
     const currentDate = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    };
-    const formattedDate = currentDate.toLocaleDateString("en-US", options);
+    const formattedDate = formatDate(currentDate);
     setDate(formattedDate);
   };
-
-  function convertDateString(dateString: string) {
-    let [month, day, year]: string[] = dateString.split(" ");
-    const monthNum = months[month];
-    day = day.replace(",", "");
-    return `${monthNum} / ${day}`;
-  }
 
   //Run once when mounted
   useEffect(() => {

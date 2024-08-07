@@ -10,6 +10,8 @@ import { Picker } from "@react-native-picker/picker";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import * as Local from "../../localDB/InitializeLocal";
 import { ThemeContext } from "@/contexts/ThemeContext";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { formatDate } from "@/Helpers/helpers";
 
 export default function recordWeight() {
   const router = useRouter();
@@ -17,7 +19,9 @@ export default function recordWeight() {
   const [units, setUnits] = useState("lbs");
   const [weight, onChangeWeight] = useState("");
   const [date, setDate] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const theme = useContext(ThemeContext);
+  const dateObj = new Date();
 
   useEffect(() => {
     if (item_date) {
@@ -66,11 +70,36 @@ export default function recordWeight() {
             { backgroundColor: theme.colors.headerColor },
           ]}
         >
-          <Text
-            style={[styles.headerText, , { color: theme.colors.textColor }]}
-          >
-            {date}
-          </Text>
+          {isOpen ? (
+            <>
+              <TouchableOpacity onPress={() => setIsOpen(false)}>
+                <Text
+                  style={[styles.headerText, { color: theme.colors.textColor }]}
+                >
+                  {date}
+                </Text>
+              </TouchableOpacity>
+              <DateTimePicker
+                mode="date"
+                display="calendar"
+                value={dateObj}
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || dateObj;
+                  const formattedDate = formatDate(currentDate);
+                  setIsOpen(false);
+                  setDate(formattedDate);
+                }}
+              />
+            </>
+          ) : (
+            <TouchableOpacity onPress={() => setIsOpen(true)}>
+              <Text
+                style={[styles.headerText, { color: theme.colors.textColor }]}
+              >
+                {date}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View
           style={[styles.formBody, { backgroundColor: theme.colors.secondary }]}
