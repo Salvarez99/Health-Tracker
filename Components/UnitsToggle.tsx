@@ -19,8 +19,8 @@ export default function UnitsToggle() {
     <View style={styles.container}>
       <Text style={[styles.text, textColor]}>lbs</Text>
       <Switch
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor="#f4f3f4"
+        trackColor={{ false: theme.colors.backgroundColor, true: theme.colors.backgroundColor }}
+        thumbColor={theme.colors.secondary}
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}
         value={isEnabled}
