@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
-import { DataPoint } from "@/types/ints";
+import { DataPoint } from "@/types/types";
 import { ThemeContext } from "@/contexts/ThemeContext";
 
 type props = {
@@ -15,7 +15,7 @@ const WeightGraph: React.FC<props> = ({ data }) => {
     <View
       style={[
         styles.chartView,
-        { backgroundColor: theme.colors.chartBackgroundColor },
+        { backgroundColor: theme.chartPallete.backgroundColor },
       ]}
     >
       <LineChart
@@ -26,15 +26,15 @@ const WeightGraph: React.FC<props> = ({ data }) => {
         hideRules={false}
         // isAnimated={true}
         thickness={2}
-        yAxisColor={theme.colors.axisColor}
-        xAxisColor={theme.colors.axisColor}
-        color={theme.colors.chartLineColor}
+        yAxisColor={theme.chartPallete.axisColor}
+        xAxisColor={theme.chartPallete.axisColor}
+        color={theme.chartPallete.chartLineColor}
         curved={true}
         dataPointsRadius={4}
-        dataPointsColor={theme.colors.chartLineColor}
+        dataPointsColor={theme.chartPallete.chartLineColor}
         startOpacity={0.5}
         endOpacity={0.2}
-        rulesColor={theme.colors.axisColor}
+        rulesColor={theme.chartPallete.axisColor}
         rulesType={"solid"}
         yAxisTextStyle={{color : theme.colors.textColor}}
         // xAxisIndicesColor={theme.colors.textColor}

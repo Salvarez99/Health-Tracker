@@ -11,7 +11,7 @@ export default function RootLayout() {
   const theme = isDark ? darkTheme : lightTheme;
 
   const headerStyle = {
-    backgroundColor: theme.colors.headerColor,
+    backgroundColor: theme.colors.tertiary,
     elevation: 10,
   };
 

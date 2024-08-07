@@ -11,7 +11,7 @@ import { useRouter, useFocusEffect } from "expo-router";
 import * as Local from "../localDB/InitializeLocal";
 import { useUnits } from "@/components/UnitsContext";
 import WeightGraph from "@/components/WeightGraph";
-import { DataPoint, recordItem } from "@/types/ints";
+import { DataPoint, recordItem } from "@/types/types";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import { convertDateString, formatDate } from "@/Helpers/helpers";
 
@@ -73,7 +73,7 @@ export default function Index() {
       <TouchableOpacity
         style={[
           styles.itemContainer,
-          { backgroundColor: theme.colors.secondary },
+          { backgroundColor: theme.colors.primary },
         ]}
         onPress={() => onItemPress(item)}
       >
@@ -104,7 +104,7 @@ export default function Index() {
         />
       </View>
       <View
-        style={[styles.footer, { backgroundColor: theme.colors.footerColor }]}
+        style={[styles.footer, { backgroundColor: theme.colors.tertiary }]}
       >
         <TouchableOpacity
           style={[

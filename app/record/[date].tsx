@@ -67,7 +67,7 @@ export default function recordWeight() {
         <View
           style={[
             styles.formHeader,
-            { backgroundColor: theme.colors.headerColor },
+            { backgroundColor: theme.colors.tertiary },
           ]}
         >
           {isOpen ? (
@@ -102,7 +102,7 @@ export default function recordWeight() {
           )}
         </View>
         <View
-          style={[styles.formBody, { backgroundColor: theme.colors.secondary }]}
+          style={[styles.formBody, { backgroundColor: theme.colors.primary }]}
         >
           <View
             style={[
