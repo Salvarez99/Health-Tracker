@@ -22,6 +22,9 @@ export default function recordWeight() {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useContext(ThemeContext);
   const dateObj = new Date();
+  const [isMatch, setIsMatch] = useState(false);
+
+  const pattern : RegExp = /^[0-9]{3}\.?[0-9]{0,2}$/;
 
   useEffect(() => {
     if (item_date) {
@@ -30,8 +33,12 @@ export default function recordWeight() {
   }, []);
 
   const onRecord = async () => {
-    if (weight === "") {
-      alert("Enter weight");
+
+    const m = pattern.test(weight);
+    setIsMatch(m);
+
+    if (!m) {
+      alert("Incorrect format inputted for weight.");
     } else {
       console.log("weight: " + weight + " " + units);
       let weights: Number[] = convertWeight(units);
@@ -112,7 +119,7 @@ export default function recordWeight() {
           >
             <TextInput
               keyboardType="numeric"
-              maxLength={5}
+              maxLength={6}
               onChangeText={onChangeWeight}
               value={weight}
               style={[
