@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, Text ,StyleSheet } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 import { DataPoint } from "@/types/types";
 import { ThemeContext } from "@/contexts/ThemeContext";
@@ -10,6 +10,37 @@ type props = {
 
 const WeightGraph: React.FC<props> = ({ data }) => {
   const theme = React.useContext(ThemeContext);
+  const data1 = [
+    {
+      value: 1,
+      label: "1",
+      dataPointText: "reded",
+      textShiftY: -10,
+      textShiftX: -10,
+    },
+    {
+      value: 11,
+      label: "11",
+      dataPointText: "reded",
+      textShiftY: -10,
+      textShiftX: -10,
+    },
+    {
+      value: 21,
+      label: "21",
+      dataPointText: "reded",
+      textShiftY: -10,
+      textShiftX: -10,
+    },
+  ];
+
+  const renderDataPoint = (item  : DataPoint) => {
+    return(
+      <View>
+        <Text>{item.label}</Text>
+      </View>
+    )
+  }
 
   return (
     <View
@@ -23,7 +54,7 @@ const WeightGraph: React.FC<props> = ({ data }) => {
         initialSpacing={0}
         spacing={80}
         width={390}
-        data={data.reverse()}
+        data={data}
         hideRules={false}
         // isAnimated={true}
         thickness={2}
@@ -37,9 +68,17 @@ const WeightGraph: React.FC<props> = ({ data }) => {
         endOpacity={0.2}
         rulesColor={theme.chartPallete.axisColor}
         rulesType={"solid"}
-        yAxisTextStyle={{color : theme.colors.textColor}}
+        yAxisTextStyle={{ color: theme.colors.textColor }}
         // xAxisIndicesColor={theme.colors.textColor}
-        xAxisLabelTextStyle={{color : theme.colors.textColor}}
+        xAxisLabelTextStyle={{ color: theme.colors.textColor }}
+        scrollToEnd
+        animateOnDataChange={true}
+        // focusedDataPointColor={"red"}
+        focusEnabled={true}
+        // onFocus={renderDataPoint}
+        unFocusOnPressOut
+        delayBeforeUnFocus={1300}
+
         
       />
     </View>

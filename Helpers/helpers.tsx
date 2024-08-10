@@ -1,18 +1,37 @@
 import { months } from "@/constants/months";
 
-export const convertDateString = (dateString: string) => {
-    let [month, day, year]: string[] = dateString.split(" ");
-    const monthNum = months[month];
-    day = day.replace(",", "");
-    return `${monthNum} / ${day}`;
-}
+/**
+ * Given dateString in format YYYY-MM-DD convert to MMM/DD/YYYY
+ * @param dateString 
+ * @returns MMM/DD/YYYY
+ */
+export const convertMMMDDYYYY = (dateString: string) => {
+  const [year, month, day] = dateString.split("-");
 
-export const formatDate = (date : Date) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    };
-    const formattedDate = date.toLocaleDateString("en-US", options);
-    return formattedDate;
-  };
+  return `${months[month]} ${day}, ${year}`;
+};
+
+/**
+ * Given dateString in format YYYY-MM-DD convert to MMM/DD/YYYY
+ * @param dateString 
+ * @returns MMM/DD/YYYY
+ */
+export const convertToMMDD = (dateString : string) => {
+  const [year, month, day] = dateString.split("-");
+  return `${month}/ ${day}`;
+};
+
+/**
+ * Given a date obj return date in YYYY-MM-DD format
+ * @param date 
+ * @returns 
+ */
+export const convertToDbDateFormat = (date: Date) => {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  return formatter.format(date);
+};

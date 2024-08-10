@@ -1,6 +1,7 @@
 export type DataPoint = {
   label: string;
   value: number;
+  secondaryLabel: string;
 };
 
 export type recordItem = {

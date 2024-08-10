@@ -11,7 +11,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import * as Local from "../../localDB/InitializeLocal";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { formatDate } from "@/Helpers/helpers";
+import { convertToDbDateFormat, convertMMMDDYYYY } from "@/Helpers/helpers";
 
 export default function recordWeight() {
   const router = useRouter();
@@ -83,7 +83,7 @@ export default function recordWeight() {
                 <Text
                   style={[styles.headerText, { color: theme.colors.textColor }]}
                 >
-                  {date}
+                  {convertMMMDDYYYY(date)}
                 </Text>
               </TouchableOpacity>
               <DateTimePicker
@@ -92,7 +92,7 @@ export default function recordWeight() {
                 value={dateObj}
                 onChange={(event, selectedDate) => {
                   const currentDate = selectedDate || dateObj;
-                  const formattedDate = formatDate(currentDate);
+                  const formattedDate = convertToDbDateFormat(currentDate);
                   setIsOpen(false);
                   setDate(formattedDate);
                 }}
@@ -103,7 +103,7 @@ export default function recordWeight() {
               <Text
                 style={[styles.headerText, { color: theme.colors.textColor }]}
               >
-                {date}
+                {convertMMMDDYYYY(date)}
               </Text>
             </TouchableOpacity>
           )}

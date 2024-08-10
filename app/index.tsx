@@ -1,6 +1,7 @@
 import {
   Text,
   View,
+  SafeAreaView,
   TouchableOpacity,
   StyleSheet,
   FlatList,
@@ -13,7 +14,11 @@ import { useUnits } from "@/components/UnitsContext";
 import WeightGraph from "@/components/WeightGraph";
 import { DataPoint, recordItem } from "@/types/types";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import { convertDateString, formatDate } from "@/Helpers/helpers";
+import {
+  convertMMMDDYYYY,
+  convertToMMDD,
+  convertToDbDateFormat,
+} from "@/Helpers/helpers";
 
 export default function Index() {
   const router = useRouter();
@@ -24,12 +29,14 @@ export default function Index() {
   const theme = useContext(ThemeContext);
 
   const loadWeights = async () => {
+    // const fetchedWeights = await Local.fetchWeightsAfterDate("2025-05-07");
     const fetchedWeights = await Local.fetchWeights();
-    const reversedWeights = fetchedWeights.reverse();
+    const reversedWeights = [...fetchedWeights].reverse();
 
-    const dataPoints: DataPoint[] = fetchedWeights.map((item) => ({
-      label: convertDateString(item.date),
+    const dataPoints: DataPoint[] = fetchedWeights.map((item : recordItem) => ({
+      label: convertToMMDD(item.date),
       value: units === "lbs" ? item.weight_lbs : item.weight_kgs,
+      secondaryLabel: "asd",
     }));
 
     setlistData(reversedWeights);
@@ -39,12 +46,13 @@ export default function Index() {
 
   const getCurrentDate = () => {
     const currentDate = new Date();
-    const formattedDate = formatDate(currentDate);
+    const formattedDate = convertToDbDateFormat(currentDate);
     setDate(formattedDate);
   };
 
   //Run once when mounted
   useEffect(() => {
+    // Local.dropTable()
     Local.createTable();
     loadWeights();
     getCurrentDate();
@@ -82,13 +90,15 @@ export default function Index() {
             ? `${item.weight_lbs} lbs`
             : `${item.weight_kgs} kgs`}
         </Text>
-        <Text style={{ color: theme.colors.textColor }}>{item.date}</Text>
+        <Text style={{ color: theme.colors.textColor }}>
+          {convertMMMDDYYYY(item.date)}
+        </Text>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <WeightGraph data={graphData} />
       <View
         style={[
@@ -122,7 +132,7 @@ export default function Index() {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

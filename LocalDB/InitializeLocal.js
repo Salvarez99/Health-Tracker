@@ -29,13 +29,13 @@ export const createTable = async () => {
 
 export const fetchWeightsByUnits = async (units) => {
   try {
-    let result = null; // Declare result as a variable (let) instead of a constant (const)
+    let result = null; 
 
     if (units === "lbs") {
-      result = await db.getAllAsync("SELECT weight_lbs, date FROM weights"); 
+      result = await db.getAllAsync("SELECT weight_lbs, date FROM weights");
       console.log("Fetched lbs");
     } else {
-      result = await db.getAllAsync("SELECT weight_kgs, date FROM weights"); 
+      result = await db.getAllAsync("SELECT weight_kgs, date FROM weights");
       console.log("Fetched kgs");
     }
 
@@ -45,7 +45,6 @@ export const fetchWeightsByUnits = async (units) => {
     return [];
   }
 };
-
 
 export const dateExist = async (date) => {
   try {
@@ -89,12 +88,42 @@ export const insertWeight = async (lbs, kgs, date) => {
 };
 
 export const fetchWeights = async () => {
+  let statement;
   try {
-    const data = await db.getAllAsync("SELECT * FROM weights;");
-    console.log("Fetched from weights.");
-    return data || [];
+    statement = await db.prepareAsync("SELECT * FROM weights ORDER BY date;");
+
+    const result = await statement.executeAsync();
+    const rows = await result.getAllAsync();
+
+    return rows;
   } catch (e) {
     console.error("Error fetching weights: ", e);
     return [];
+  } finally {
+    if (statement) {
+      await statement.finalizeAsync();
+    }
+  }
+};
+
+export const fetchWeightsAfterDate = async (date) => {
+  let statement;
+  try {
+    statement = await db.prepareAsync(
+      "SELECT * FROM weights WHERE date >= $date ORDER BY date"
+    );
+
+    const result = await statement.executeAsync({ $date: date });
+    const allRows = await result.getAllAsync();
+
+    console.log(`Fetched weights after ${date}:`, allRows);
+    return allRows;
+  } catch (e) {
+    console.error("Error fetching weights: ", e);
+    return [];
+  } finally {
+    if (statement) {
+      await statement.finalizeAsync();
+    }
   }
 };
