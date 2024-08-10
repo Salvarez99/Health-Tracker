@@ -12,9 +12,9 @@ export const convertMMMDDYYYY = (dateString: string) => {
 };
 
 /**
- * Given dateString in format YYYY-MM-DD convert to MMM/DD/YYYY
+ * Given dateString in format YYYY-MM-DD convert to MM/DD
  * @param dateString 
- * @returns MMM/DD/YYYY
+ * @returns MM/DD
  */
 export const convertToMMDD = (dateString : string) => {
   const [year, month, day] = dateString.split("-");
@@ -35,3 +35,12 @@ export const convertToDbDateFormat = (date: Date) => {
 
   return formatter.format(date);
 };
+
+export const f = (dateString : string, days : number) => {
+  const date = new Date(dateString);
+  date.setDate(date.getDate() - days);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate() + 1).padStart(2, '0');
+  return`${year}-${month}-${day}`;
+}

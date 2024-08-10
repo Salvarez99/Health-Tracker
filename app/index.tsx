@@ -13,6 +13,7 @@ import * as Local from "../localDB/InitializeLocal";
 import { useUnits } from "@/components/UnitsContext";
 import WeightGraph from "@/components/WeightGraph";
 import { DataPoint, recordItem } from "@/types/types";
+import ChartFilterButtons from "@/components/chartFilterButtons";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import {
   convertMMMDDYYYY,
@@ -29,18 +30,18 @@ export default function Index() {
   const theme = useContext(ThemeContext);
 
   const loadWeights = async () => {
-    // const fetchedWeights = await Local.fetchWeightsAfterDate("2025-05-07");
+    // const fetchedWeights = await Local.fetchWeightsAfterDate("2024-12-07");
     const fetchedWeights = await Local.fetchWeights();
     const reversedWeights = [...fetchedWeights].reverse();
 
-    const dataPoints: DataPoint[] = fetchedWeights.map((item : recordItem) => ({
+    const dataPoints: DataPoint[] = fetchedWeights.map((item: recordItem) => ({
       label: convertToMMDD(item.date),
       value: units === "lbs" ? item.weight_lbs : item.weight_kgs,
       secondaryLabel: "asd",
     }));
 
-    setlistData(reversedWeights);
-    setGraphData(dataPoints);
+    setlistData([...reversedWeights]);
+    setGraphData([...dataPoints]);
     // console.log(dataPoints);
   };
 
@@ -100,6 +101,7 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <WeightGraph data={graphData} />
+      <ChartFilterButtons/>
       <View
         style={[
           styles.recordsView,
