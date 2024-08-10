@@ -7,14 +7,14 @@ const ranges: string[] = ["7 days", "1 month", "12 months"];
 export default function ChartFilterButtons() {
   const theme = useContext(ThemeContext);
 
-  const renderItem = (item: string) => {
+  const renderItem = (item: string) => (
     <TouchableOpacity
       key={item}
       style={[styles.button, { backgroundColor: theme.colors.primary }]}
     >
       <Text style={{ color: theme.colors.text }}>{item}</Text>
-    </TouchableOpacity>;
-  };
+    </TouchableOpacity>
+  );
 
   return (
     <View
