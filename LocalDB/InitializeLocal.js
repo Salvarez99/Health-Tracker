@@ -106,20 +106,20 @@ export const fetchWeights = async () => {
   }
 };
 
-export const fetchWeightsAfterDate = async (date) => {
+export const fetchWeightsAfterDate = async (startDate, endDate) => {
   let statement;
   try {
     statement = await db.prepareAsync(
-      "SELECT * FROM weights WHERE date >= $date ORDER BY date"
+      "SELECT * FROM weights WHERE date >= $startDate AND date <= $endDate ORDER BY date"
     );
 
-    const result = await statement.executeAsync({ $date: date });
+    const result = await statement.executeAsync({ $startDate: startDate, $endDate : endDate });
     const allRows = await result.getAllAsync();
 
-    console.log(`Fetched weights after ${date}:`, allRows);
+    console.log(`Fetched weights between ${startDate} - ${endDate}:`);
     return allRows;
   } catch (e) {
-    console.error("Error fetching weights: ", e);
+    console.error("Error fetching weights.", e);
     return [];
   } finally {
     if (statement) {

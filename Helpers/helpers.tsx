@@ -36,7 +36,7 @@ export const convertToDbDateFormat = (date: Date) => {
   return formatter.format(date);
 };
 
-export const f = (dateString : string, days : number) => {
+export const getRange = (dateString : string, days : number) => {
   const date = new Date(dateString);
   date.setDate(date.getDate() - days);
   const year = date.getFullYear();

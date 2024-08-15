@@ -7,19 +7,22 @@ import {
   FlatList,
   ListRenderItem,
 } from "react-native";
-import { useCallback, useEffect, useState, useContext } from "react";
 import { useRouter, useFocusEffect } from "expo-router";
-import * as Local from "../localDB/InitializeLocal";
-import { useUnits } from "@/components/UnitsContext";
-import WeightGraph from "@/components/WeightGraph";
-import { DataPoint, recordItem } from "@/types/types";
-import ChartFilterButtons from "@/components/chartFilterButtons";
+import { useCallback, useEffect, useState, useContext } from "react";
 import { ThemeContext } from "@/contexts/ThemeContext";
+import { ChartFilterContext } from "@/contexts/ChartFilterContext";
+import { useUnits } from "@/components/UnitsContext";
+import { DataPoint, recordItem } from "@/types/types";
 import {
   convertMMMDDYYYY,
   convertToMMDD,
   convertToDbDateFormat,
+  getRange,
 } from "@/Helpers/helpers";
+import * as Local from "../localDB/InitializeLocal";
+import WeightGraph from "@/components/WeightGraph";
+import ChartFilterButtons from "@/components/ChartFilterButtons";
+import { filterRanges } from "@/constants/filterRanges";
 
 export default function Index() {
   const router = useRouter();
@@ -28,10 +31,25 @@ export default function Index() {
   const [graphData, setGraphData] = useState<DataPoint[]>([]);
   const [listData, setlistData] = useState<recordItem[]>([]);
   const theme = useContext(ThemeContext);
+  const filterContext = useContext(ChartFilterContext);
+  const [rangeDate, setRangeDate] = useState<string>();
+
+  if (!filterContext) {
+    throw new Error(
+      "ChartFilterButtons must be used within a ChartFilterProvider"
+    );
+  }
+  const getFilterDate = () =>  {
+    const { filter, setFilter } = filterContext;
+    const range = filterRanges[filter];
+    const dateRange = getRange(date, range);
+    setRangeDate(dateRange);
+  };
 
   const loadWeights = async () => {
-    // const fetchedWeights = await Local.fetchWeightsAfterDate("2024-12-07");
-    const fetchedWeights = await Local.fetchWeights();
+    console.log(`Ranged date: ${rangeDate}`)
+    const fetchedWeights = await Local.fetchWeightsAfterDate(rangeDate, date);
+    // const fetchedWeights = await Local.fetchWeights();
     const reversedWeights = [...fetchedWeights].reverse();
 
     const dataPoints: DataPoint[] = fetchedWeights.map((item: recordItem) => ({
@@ -55,13 +73,15 @@ export default function Index() {
   useEffect(() => {
     // Local.dropTable()
     Local.createTable();
+    getFilterDate();
     loadWeights();
     getCurrentDate();
-  }, [units]);
+  }, [units, rangeDate, filterContext]);
 
   //Run when in focus
   useFocusEffect(
     useCallback(() => {
+      getFilterDate();
       loadWeights();
       getCurrentDate();
     }, [])
@@ -101,7 +121,7 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <WeightGraph data={graphData} />
-      <ChartFilterButtons/>
+      <ChartFilterButtons />
       <View
         style={[
           styles.recordsView,

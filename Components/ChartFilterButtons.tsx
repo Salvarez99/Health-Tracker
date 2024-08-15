@@ -1,20 +1,55 @@
+import React, { useContext, useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import { useContext } from "react";
-
-const ranges: string[] = ["7 days", "1 month", "12 months"];
+import { ChartFilterContext } from "@/contexts/ChartFilterContext";
+import { filterRanges } from "@/constants/filterRanges";
 
 export default function ChartFilterButtons() {
   const theme = useContext(ThemeContext);
+  const filterContext = useContext(ChartFilterContext);
 
-  const renderItem = (item: string) => (
-    <TouchableOpacity
-      key={item}
-      style={[styles.button, { backgroundColor: theme.colors.primary }]}
-    >
-      <Text style={{ color: theme.colors.text }}>{item}</Text>
-    </TouchableOpacity>
-  );
+  // Ensure filterContext is defined before destructuring
+  if (!filterContext) {
+    throw new Error("ChartFilterButtons must be used within a ChartFilterProvider");
+  }
+
+  const { filter, setFilter } = filterContext;
+  const [selectedRange, setSelectedRange] = useState<string | null>(filter);
+
+  const handlePress = (item: string) => {
+    setSelectedRange(item);
+    setFilter(item);
+    // console.log(item);
+  };
+
+  const renderItem = (item: [string, number]) => {
+    const [label, value] = item;
+    const isSelected = label === selectedRange;
+  
+    return (
+      <TouchableOpacity
+        key={label}
+        style={[
+          styles.button,
+          {
+            backgroundColor: isSelected
+              ? theme.colors.textColor 
+              : theme.colors.primary,
+          },
+        ]}
+        onPress={() => handlePress(label)}
+      >
+        <Text
+          style={{
+            color: isSelected ? theme.colors.primary : theme.colors.textColor,
+          }}
+        >
+          {label}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+  
 
   return (
     <View
@@ -23,7 +58,7 @@ export default function ChartFilterButtons() {
         { backgroundColor: theme.colors.backgroundColor },
       ]}
     >
-      {ranges.map(renderItem)}
+      {Object.entries(filterRanges).map(renderItem)}
     </View>
   );
 }
@@ -40,7 +75,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     borderRadius: 20,
-    width: 90,
+    width: '32%',
     height: 38,
+    elevation : 5
   },
 });

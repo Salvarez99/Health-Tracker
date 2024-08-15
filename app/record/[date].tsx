@@ -24,7 +24,7 @@ export default function recordWeight() {
   const dateObj = new Date();
   const [isMatch, setIsMatch] = useState(false);
 
-  const pattern : RegExp = /^[0-9]{3}\.?[0-9]{0,2}$/;
+  const pattern: RegExp = /^[0-9]{3}\.?[0-9]{0,2}$/;
 
   useEffect(() => {
     if (item_date) {
@@ -33,7 +33,6 @@ export default function recordWeight() {
   }, []);
 
   const onRecord = async () => {
-
     const m = pattern.test(weight);
     setIsMatch(m);
 
@@ -90,6 +89,7 @@ export default function recordWeight() {
                 mode="date"
                 display="calendar"
                 value={dateObj}
+                maximumDate={dateObj}
                 onChange={(event, selectedDate) => {
                   const currentDate = selectedDate || dateObj;
                   const formattedDate = convertToDbDateFormat(currentDate);
@@ -167,11 +167,11 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: "white",
+    alignItems: "center",
   },
   form: {
     position: "absolute",
-    top: 10,
-    left: 10,
+    paddingTop: 10,
     width: 370,
     height: 350,
     borderRadius: 7,

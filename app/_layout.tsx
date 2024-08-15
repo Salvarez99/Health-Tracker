@@ -1,10 +1,11 @@
-import { UnitsProvider } from "@/components/UnitsContext";
-import UnitsToggle from "@/components/UnitsToggle";
 import { Stack } from "expo-router";
-import { ThemeContext } from "@/contexts/ThemeContext";
+import { useState } from "react";
+import UnitsToggle from "@/components/UnitsToggle";
 import { darkTheme } from "@/themes/DarkTheme";
 import { lightTheme } from "@/themes/LightTheme";
-import { useState } from "react";
+import { UnitsProvider } from "@/components/UnitsContext";
+import { ThemeContext } from "@/contexts/ThemeContext";
+import { ChartFilterProvider } from "@/contexts/ChartFilterContext";
 
 export default function RootLayout() {
   const [isDark, setIsDark] = useState(false);
@@ -22,25 +23,27 @@ export default function RootLayout() {
   return (
     <ThemeContext.Provider value={theme}>
       <UnitsProvider>
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              headerRight: () => <UnitsToggle />,
-              title: "Index",
-              headerStyle: headerStyle,
-              headerTitleStyle: headerTitleStyle,
-            }}
-          />
-          <Stack.Screen
-            name="record/[date]"
-            options={{
-              title: "Record Weight",
-              headerStyle: headerStyle,
-              headerTitleStyle: headerTitleStyle,
-            }}
-          />
-        </Stack>
+        <ChartFilterProvider>
+          <Stack>
+            <Stack.Screen
+              name="index"
+              options={{
+                headerRight: () => <UnitsToggle />,
+                title: "Index",
+                headerStyle: headerStyle,
+                headerTitleStyle: headerTitleStyle,
+              }}
+            />
+            <Stack.Screen
+              name="record/[date]"
+              options={{
+                title: "Record Weight",
+                headerStyle: headerStyle,
+                headerTitleStyle: headerTitleStyle,
+              }}
+            />
+          </Stack>
+        </ChartFilterProvider>
       </UnitsProvider>
     </ThemeContext.Provider>
   );
