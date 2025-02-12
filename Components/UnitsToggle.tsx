@@ -1,25 +1,43 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { View, Text, Switch, StyleSheet } from "react-native";
 import { useUnits } from "./UnitsContext";
 import { ThemeContext } from "@/contexts/ThemeContext";
+import * as Local from "../localDB/InitializeLocal";
 
 export default function UnitsToggle() {
   const { units, setUnits } = useUnits();
-  const isEnabled = units === "kgs";
+  // const [units, setUnits ] = useState("lbs");
+  const [isEnabled, setIsEnabled] = useState(false);
   const theme = useContext(ThemeContext);
 
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
     const newUnits = isEnabled ? "lbs" : "kgs";
+    setIsEnabled(!isEnabled);
+    await Local.updateUnits(newUnits);
     setUnits(newUnits);
   };
 
   const textColor = { color: theme.colors.textColor };
 
+  const getUserPrefs = async () => {
+    const user = await Local.fetchUserPrefs();
+    const initialUnits = user.units || "lbs"; 
+    setUnits(initialUnits);
+    setIsEnabled(initialUnits === 'kgs')
+  }
+
+  useEffect(() => {
+    getUserPrefs();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={[styles.text, textColor]}>lbs</Text>
       <Switch
-        trackColor={{ false: theme.colors.backgroundColor, true: theme.colors.backgroundColor }}
+        trackColor={{
+          false: theme.colors.backgroundColor,
+          true: theme.colors.backgroundColor,
+        }}
         thumbColor={theme.colors.secondary}
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}

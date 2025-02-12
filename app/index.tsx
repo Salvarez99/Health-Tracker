@@ -26,20 +26,27 @@ import { filterRanges } from "@/constants/filterRanges";
 
 export default function Index() {
   const router = useRouter();
-  const { units } = useUnits();
+  const { units, setUnits } = useUnits();
   const [date, setDate] = useState("");
   const [graphData, setGraphData] = useState<DataPoint[]>([]);
   const [listData, setlistData] = useState<recordItem[]>([]);
   const theme = useContext(ThemeContext);
   const filterContext = useContext(ChartFilterContext);
-  const [rangeDate, setRangeDate] = useState<string>();
+  const [rangeDate, setRangeDate] = useState<string>("");
 
   if (!filterContext) {
     throw new Error(
       "ChartFilterButtons must be used within a ChartFilterProvider"
     );
   }
-  const getFilterDate = () =>  {
+
+  const getUserPrefs = async () => {
+    const user = await Local.fetchUserPrefs();
+    const initialUnits = user.units || "lbs";
+    setUnits(initialUnits);
+  };
+
+  const getFilterDate = () => {
     const { filter, setFilter } = filterContext;
     const range = filterRanges[filter];
     const dateRange = getRange(date, range);
@@ -47,7 +54,6 @@ export default function Index() {
   };
 
   const loadWeights = async () => {
-    console.log(`Ranged date: ${rangeDate}`)
     const fetchedWeights = await Local.fetchWeightsAfterDate(rangeDate, date);
     // const fetchedWeights = await Local.fetchWeights();
     const reversedWeights = [...fetchedWeights].reverse();
@@ -66,24 +72,40 @@ export default function Index() {
   const getCurrentDate = () => {
     const currentDate = new Date();
     const formattedDate = convertToDbDateFormat(currentDate);
-    setDate(formattedDate);
+    
+    setDate((prevDate) => (prevDate !== formattedDate ? formattedDate : `${formattedDate}`)); 
   };
+  
 
   //Run once when mounted
   useEffect(() => {
-    // Local.dropTable()
     Local.createTable();
-    getFilterDate();
-    loadWeights();
     getCurrentDate();
-  }, [units, rangeDate, filterContext]);
+    getUserPrefs();
+  }, []);
 
-  //Run when in focus
+  useEffect(() => {
+    if (date) {
+      console.log("Date updated: " + date);
+      getFilterDate();
+    }
+  }, [date, filterContext.filter]);
+  
+
+  useEffect(() => {
+    if (rangeDate) {
+      console.log("Range date updated: " + rangeDate);
+      loadWeights();
+    }
+  }, [rangeDate]);
+  
+
   useFocusEffect(
     useCallback(() => {
-      getFilterDate();
-      loadWeights();
-      getCurrentDate();
+      getCurrentDate()
+      getFilterDate(); // Ensure rangeDate updates
+      loadWeights(); // Ensure list data reloads
+      console.log("Focus triggered, Date: " + date)
     }, [])
   );
 

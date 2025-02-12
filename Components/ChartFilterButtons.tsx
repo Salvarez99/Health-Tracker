@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import { ChartFilterContext } from "@/contexts/ChartFilterContext";
 import { filterRanges } from "@/constants/filterRanges";
+import * as Local from "../localDB/InitializeLocal";
 
 export default function ChartFilterButtons() {
   const theme = useContext(ThemeContext);
@@ -16,9 +17,22 @@ export default function ChartFilterButtons() {
   const { filter, setFilter } = filterContext;
   const [selectedRange, setSelectedRange] = useState<string | null>(filter);
 
-  const handlePress = (item: string) => {
+   const getUserPrefs = async () => {
+      const user = await Local.fetchUserPrefs();
+      const range = user.filterRange || "7 days"; 
+      setFilter(range);
+      setSelectedRange(range);
+    }
+  
+    useEffect(() => {
+      getUserPrefs();
+    }, []);
+
+
+  const handlePress = async (item: string) => {
     setSelectedRange(item);
     setFilter(item);
+    await Local.updateFilterRange(item);
     // console.log(item);
   };
 

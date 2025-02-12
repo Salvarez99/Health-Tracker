@@ -17,21 +17,6 @@ export const lightTheme: typeTheme = {
   },
 };
 
-// leo's theme
-// colors: {
-//   primary: "#f0e7dd",
-//   secondary: "#ead6c0",
-//   tertiary: "#ead6c0",
-//   textColor: "#551111",
-//   backgroundColor: "#603838",
-//   buttonColor: "#f0e7dd",
-// },
-// chartPallete: {
-//   backgroundColor: "#f0e7dd",
-//   axisColor: "#591618",
-//   chartLineColor: "#591618",
-// },
-
 // Anu's theme
 // colors: {
 //   primary: "#d9c0f7",

@@ -31,18 +31,3 @@ export const darkTheme: typeTheme = {
 //   axisColor: "#a8ebfa",
 //   chartLineColor: "#a8ebfa",
 // },
-
-// Leo's Dark Theme
-// colors: {
-//   primary: "#4f7348",
-//   secondary: "#709c68",
-//   tertiary: "#293626",
-//   textColor: "#cae3c5",
-//   backgroundColor: "#171717",
-//   buttonColor: "#385334",
-// },
-// chartPallete: {
-//   backgroundColor: "#517549",
-//   axisColor: "#cae3c5",
-//   chartLineColor: "#cae3c5",
-// },
