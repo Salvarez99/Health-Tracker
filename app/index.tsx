@@ -27,12 +27,12 @@ import { filterRanges } from "@/constants/filterRanges";
 export default function Index() {
   const router = useRouter();
   const { units, setUnits } = useUnits();
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<string | null>(null);
   const [graphData, setGraphData] = useState<DataPoint[]>([]);
   const [listData, setlistData] = useState<recordItem[]>([]);
   const theme = useContext(ThemeContext);
   const filterContext = useContext(ChartFilterContext);
-  const [rangeDate, setRangeDate] = useState<string>("");
+  const [rangeDate, setRangeDate] = useState<string | null>(null);
 
   if (!filterContext) {
     throw new Error(
@@ -49,7 +49,7 @@ export default function Index() {
   const getFilterDate = () => {
     const { filter, setFilter } = filterContext;
     const range = filterRanges[filter];
-    const dateRange = getRange(date, range);
+    const dateRange = date ? getRange(date, range) : null;
     setRangeDate(dateRange);
   };
 
@@ -80,13 +80,18 @@ export default function Index() {
   //Run once when mounted
   useEffect(() => {
     Local.createTable();
-    getCurrentDate();
+    if(!date){
+      getCurrentDate();
+    }
     getUserPrefs();
   }, []);
 
   useEffect(() => {
+    loadWeights();
+  },[units]);
+
+  useEffect(() => {
     if (date) {
-      console.log("Date updated: " + date);
       getFilterDate();
     }
   }, [date, filterContext.filter]);
@@ -102,11 +107,16 @@ export default function Index() {
 
   useFocusEffect(
     useCallback(() => {
-      getCurrentDate()
+      if(!date){
+        getCurrentDate()
+      }
+      if(!rangeDate){
+        getFilterDate();
+      }
       getFilterDate(); // Ensure rangeDate updates
       loadWeights(); // Ensure list data reloads
       console.log("Focus triggered, Date: " + date)
-    }, [])
+    }, [date])
   );
 
   const onItemPress = (item: recordItem) => {
@@ -166,7 +176,7 @@ export default function Index() {
           onPress={() =>
             router.push({
               pathname: "/record/[date]",
-              params: { date: date },
+              params: { date: date ?? '' },
             })
           }
         >
