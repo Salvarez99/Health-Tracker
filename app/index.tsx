@@ -26,13 +26,15 @@ import { filterRanges } from "@/constants/filterRanges";
 
 export default function Index() {
   const router = useRouter();
-  const { units, setUnits } = useUnits();
-  const [date, setDate] = useState<string | null>(null);
-  const [graphData, setGraphData] = useState<DataPoint[]>([]);
-  const [listData, setlistData] = useState<recordItem[]>([]);
   const theme = useContext(ThemeContext);
   const filterContext = useContext(ChartFilterContext);
+  const { units, setUnits } = useUnits();
+
+  const [date, setDate] = useState<string | null>(null);
   const [rangeDate, setRangeDate] = useState<string | null>(null);
+  
+  const [listData, setlistData] = useState<recordItem[]>([]);
+  const [graphData, setGraphData] = useState<DataPoint[]>([]);
 
   if (!filterContext) {
     throw new Error(
@@ -45,88 +47,61 @@ export default function Index() {
     const initialUnits = user.units || "lbs";
     setUnits(initialUnits);
   };
+  
+    const getCurrentDate = async () => {
+      const currentDate = new Date();
+      const formattedDate = convertToDbDateFormat(currentDate);
+      await setDate(formattedDate);
+      return formattedDate;
+    };
 
   const getFilterDate = async () => {
-    if (!date) return; // Ensure date exists before proceeding
+    const formattedDate = await getCurrentDate(); 
   
     const { filter } = filterContext;
     const range = filterRanges[filter];
-    const dateRange = getRange(date, range);
-  
-    setRangeDate(dateRange);
-    return dateRange; // Return the computed rangeDate for chaining
+    const dateRange = getRange(formattedDate, range);
+    return dateRange;
   };
-  
   
 
   const loadWeights = async () => {
-    const fetchedWeights = await Local.fetchWeightsAfterDate(rangeDate, date);
-    // const fetchedWeights = await Local.fetchWeights();
+    const currentDate = await getCurrentDate();
+    const dateRange = await getFilterDate();
+  
+    const fetchedWeights = await Local.fetchWeightsAfterDate(dateRange, currentDate);
     const reversedWeights = [...fetchedWeights].reverse();
-
+  
     const dataPoints: DataPoint[] = fetchedWeights.map((item: recordItem) => ({
       label: convertToMMDD(item.date),
       value: units === "lbs" ? item.weight_lbs : item.weight_kgs,
       secondaryLabel: "asd",
     }));
-
+  
     setlistData([...reversedWeights]);
     setGraphData([...dataPoints]);
-    // console.log(dataPoints);
   };
 
-  const getCurrentDate = () => {
-    const currentDate = new Date();
-    const formattedDate = convertToDbDateFormat(currentDate);
-    
-    setDate((prevDate) => (prevDate !== formattedDate ? formattedDate : `${formattedDate}`)); 
-  };
-  
-
-  //Run once when mounted
+  //On startup, get user prefs and weights
   useEffect(() => {
+    const handleStart = async () => {
+      await loadWeights();
+    };
+  
     Local.createTable();
-    if(!date){
-      getCurrentDate();
-    }
     getUserPrefs();
+    handleStart();
   }, []);
-
-  useEffect(() => {
-    loadWeights();
-  },[units]);
-
-  useEffect(() => {
-    if (date) {
-      getFilterDate();
-    }
-  }, [date, filterContext.filter]);
   
-
-  useEffect(() => {
-    if (rangeDate) {
-      console.log("Range date updated: " + rangeDate);
-      loadWeights();
-    }
-  }, [rangeDate]);
-  
-
   useFocusEffect(
     useCallback(() => {
-      const handleFocus = async () => {
-        getCurrentDate(); // Ensure date is set first
-  
-        const newRangeDate = await getFilterDate(); // Wait for rangeDate update
-  
-        if (newRangeDate) {
-          await loadWeights(); // Now load weights with the updated rangeDate
-        }
+      const handleStart = async () => {
+        await loadWeights(); 
       };
   
-      handleFocus();
+      handleStart();
     }, [])
   );
-  
 
   const onItemPress = (item: recordItem) => {
     console.log(`id: ${item.id} | date: ${item.date}`);
@@ -185,7 +160,7 @@ export default function Index() {
           onPress={() =>
             router.push({
               pathname: "/record/[date]",
-              params: { date: date ?? '' },
+              params: { date: date ?? "" },
             })
           }
         >

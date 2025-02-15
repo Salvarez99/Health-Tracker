@@ -61,7 +61,7 @@ export const createUserPrefs = async () => {
 export const fetchUserPrefs = async () => {
   try {
     const user = await db.getFirstAsync("SELECT * FROM userPreferences")
-    console.log("User fetched successfully")
+    // console.log("User fetched successfully")
     return user || [];
   } catch (e) {
     console.error("Error fetching user: ", e);
