@@ -46,12 +46,18 @@ export default function Index() {
     setUnits(initialUnits);
   };
 
-  const getFilterDate = () => {
-    const { filter, setFilter } = filterContext;
+  const getFilterDate = async () => {
+    if (!date) return; // Ensure date exists before proceeding
+  
+    const { filter } = filterContext;
     const range = filterRanges[filter];
-    const dateRange = date ? getRange(date, range) : null;
+    const dateRange = getRange(date, range);
+  
     setRangeDate(dateRange);
+    return dateRange; // Return the computed rangeDate for chaining
   };
+  
+  
 
   const loadWeights = async () => {
     const fetchedWeights = await Local.fetchWeightsAfterDate(rangeDate, date);
@@ -107,17 +113,20 @@ export default function Index() {
 
   useFocusEffect(
     useCallback(() => {
-      if(!date){
-        getCurrentDate()
-      }
-      if(!rangeDate){
-        getFilterDate();
-      }
-      getFilterDate(); // Ensure rangeDate updates
-      loadWeights(); // Ensure list data reloads
-      console.log("Focus triggered, Date: " + date)
-    }, [date])
+      const handleFocus = async () => {
+        getCurrentDate(); // Ensure date is set first
+  
+        const newRangeDate = await getFilterDate(); // Wait for rangeDate update
+  
+        if (newRangeDate) {
+          await loadWeights(); // Now load weights with the updated rangeDate
+        }
+      };
+  
+      handleFocus();
+    }, [])
   );
+  
 
   const onItemPress = (item: recordItem) => {
     console.log(`id: ${item.id} | date: ${item.date}`);
