@@ -30,6 +30,8 @@ export default function Index() {
   const filterContext = useContext(ChartFilterContext);
   const { units, setUnits } = useUnits();
 
+  const [initialized, setInitialized] = useState(false);
+
   const [date, setDate] = useState<string | null>(null);
   const [rangeDate, setRangeDate] = useState<string | null>(null);
   
@@ -85,23 +87,37 @@ export default function Index() {
   //On startup, get user prefs and weights
   useEffect(() => {
     const handleStart = async () => {
+      if (initialized) return; // Prevent multiple runs
+        setInitialized(true);
       await loadWeights();
     };
   
     Local.createTable();
     getUserPrefs();
     handleStart();
-  }, []);
+  }, [initialized]);
   
+  //On focus, get weights
   useFocusEffect(
     useCallback(() => {
-      const handleStart = async () => {
+      const handleFocus = async () => {
+        
         await loadWeights(); 
       };
-  
-      handleStart();
-    }, [])
+      
+      if (!initialized) return;
+      handleFocus();
+    }, [initialized])
   );
+
+  useEffect(() => {
+    const handleFilterChange = async () => {
+      await loadWeights();
+    };
+    
+    if (!initialized) return;
+    handleFilterChange();
+  }, [filterContext.filter]);
 
   const onItemPress = (item: recordItem) => {
     console.log(`id: ${item.id} | date: ${item.date}`);
