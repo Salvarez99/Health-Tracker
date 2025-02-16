@@ -10,8 +10,6 @@ import {
 import { useRouter, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState, useContext } from "react";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import { ChartFilterContext } from "@/contexts/ChartFilterContext";
-import { useUnits } from "@/contexts/UnitsContext";
 import { DataPoint, recordItem } from "@/types/types";
 import {
   convertMMMDDYYYY,
@@ -30,28 +28,12 @@ export default function Index() {
   const theme = useContext(ThemeContext);
   const userPreferences = useContext(UserPreferencesContext);
   if (!userPreferences) throw new Error('UserPreferencesContext must be used within UserPreferencesProvider');
-  // const filterContext = useContext(ChartFilterContext);
-  // const { units, setUnits } = useUnits();
 
-  const [initialized, setInitialized] = useState(false);
 
   const [date, setDate] = useState<string | null>(null);
-  const [rangeDate, setRangeDate] = useState<string | null>(null);
 
   const [listData, setlistData] = useState<recordItem[]>([]);
   const [graphData, setGraphData] = useState<DataPoint[]>([]);
-
-  // if (!filterContext) {
-  //   throw new Error(
-  //     "ChartFilterButtons must be used within a ChartFilterProvider"
-  //   );
-  // }
-
-  const getUserPrefs = async () => {
-    const user = await Local.fetchUserPrefs();
-    const initialUnits = user.units || "lbs";
-    // setUnits(initialUnits);
-  };
 
   const getCurrentDate = async () => {
     const currentDate = new Date();

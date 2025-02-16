@@ -8,9 +8,7 @@ import * as Local from "../localDB/InitializeLocal";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 
 export default function RootLayout() {
-  // const [userThemePref, setUserThemePref] = useState("light");
   const [theme, setTheme] = useState(lightTheme);
-  // const [isLoading, setIsLoading] = useState(true);
 
   const headerStyle = {
     backgroundColor: theme.colors.tertiary,
