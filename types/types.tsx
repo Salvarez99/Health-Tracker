@@ -1,3 +1,12 @@
+export type UserPreferences = {
+  theme: "light" | "dark";
+  units: "lbs" | "kgs";
+  filter: "7 days" | "1 month" | "12 months";
+  setTheme: (theme: "light" | "dark") => void;
+  setUnits: (units: "lbs" | "kgs") => void;
+  setFilter: (filter: "7 days" | "1 month" | "12 months") => void;
+};
+
 export type DataPoint = {
   label: string;
   value: number;
