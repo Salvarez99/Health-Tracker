@@ -1,19 +1,14 @@
 import { Stack } from "expo-router";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
 import UnitsToggle from "@/components/UnitsToggle";
 import { darkTheme } from "@/themes/DarkTheme";
 import { lightTheme } from "@/themes/LightTheme";
-import { UnitsProvider } from "@/components/UnitsContext";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import { ChartFilterProvider } from "@/contexts/ChartFilterContext";
 import * as Local from "../localDB/InitializeLocal";
-import { useTheme } from "@react-navigation/native";
+import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 
 export default function RootLayout() {
-  const [userThemePref, setUserThemePref] = useState("light");
   const [theme, setTheme] = useState(lightTheme);
-  const [isLoading, setIsLoading] = useState(true);
 
   const headerStyle = {
     backgroundColor: theme.colors.tertiary,
@@ -26,8 +21,7 @@ export default function RootLayout() {
 
   const getUserPrefs = async () => {
     const user = await Local.fetchUserPrefs();
-    setUserThemePref(user.theme_mode);
-    // Set theme based on user preference
+    console.log("User theme mode:", user.theme_mode);
     if (user.theme_mode === "dark") {
       setTheme(darkTheme);
     } else {
@@ -35,66 +29,29 @@ export default function RootLayout() {
     }
   };
 
-  useEffect(() => {
-    try{
-      Local.createUserPrefs();
-      getUserPrefs(); // Fetch and apply user preferences
-      console.log("Theme Preference: " + userThemePref)
-      
-    }catch(error){
-      console.error("Failed to load preferences", error)
-    }finally{
-      setIsLoading(false);
-    }
-  }, []);
-
-  // Update the local storage when theme changes
-  useEffect(() => {
-    const themeMode = theme === darkTheme ? "dark" : "light";
-    Local.updateThemeMode(themeMode);
-  }, [theme]);
-
-  if (isLoading) {
-    return (
-      <View style={[styles.container, { backgroundColor: '#FFF' }]}>
-        <ActivityIndicator size="large" color="#333" />
-      </View>
-    );
-  }
   return (
-    <ThemeContext.Provider value={theme}>
-      <UnitsProvider>
-        <ChartFilterProvider>
-          <Stack>
-            <Stack.Screen
-              name="index"
-              options={{
-                headerRight: () => <UnitsToggle />,
-                title: "Index",
-                headerStyle: headerStyle,
-                headerTitleStyle: headerTitleStyle,
-              }}
-            />
-            <Stack.Screen
-              name="record/[date]"
-              options={{
-                title: "Record Weight",
-                headerStyle: headerStyle,
-                headerTitleStyle: headerTitleStyle,
-              }}
-            />
-          </Stack>
-        </ChartFilterProvider>
-      </UnitsProvider>
-    </ThemeContext.Provider>
+    <UserPreferencesProvider>
+      <ThemeContext.Provider value={lightTheme}>
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              headerRight: () => <UnitsToggle />,
+              title: "Index",
+              headerStyle: headerStyle,
+              headerTitleStyle: headerTitleStyle,
+            }}
+          />
+          <Stack.Screen
+            name="record/[date]"
+            options={{
+              title: "Record Weight",
+              headerStyle: headerStyle,
+              headerTitleStyle: headerTitleStyle,
+            }}
+          />
+        </Stack>
+      </ThemeContext.Provider>
+    </UserPreferencesProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  }
-});

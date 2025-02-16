@@ -1,39 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import { ChartFilterContext } from "@/contexts/ChartFilterContext";
 import { filterRanges } from "@/constants/filterRanges";
 import * as Local from "../localDB/InitializeLocal";
+import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
 
 export default function ChartFilterButtons() {
   const theme = useContext(ThemeContext);
-  const filterContext = useContext(ChartFilterContext);
 
-  // Ensure filterContext is defined before destructuring
-  if (!filterContext) {
-    throw new Error("ChartFilterButtons must be used within a ChartFilterProvider");
-  }
+  const userPreferences = useContext(UserPreferencesContext);
+  if (!userPreferences) throw new Error('UserPreferencesContext must be used within UserPreferencesProvider');
 
-  const { filter, setFilter } = filterContext;
-  const [selectedRange, setSelectedRange] = useState<string | null>(filter);
+  const [selectedRange, setSelectedRange] = useState<string | null>("7 days");
 
-   const getUserPrefs = async () => {
-      const user = await Local.fetchUserPrefs();
-      const range = user.filterRange || "7 days"; 
-      setFilter(range);
-      setSelectedRange(range);
-    }
-  
     useEffect(() => {
-      getUserPrefs();
+      setSelectedRange(userPreferences.filter);
     }, []);
 
 
-  const handlePress = async (item: string) => {
+  const handlePress = async (item: "7 days" | "1 month" | "12 months") => {
     setSelectedRange(item);
-    setFilter(item);
+    await userPreferences.setFilter(item);
     await Local.updateFilterRange(item);
-    // console.log(item);
   };
 
   const renderItem = (item: [string, number]) => {
@@ -51,7 +39,7 @@ export default function ChartFilterButtons() {
               : theme.colors.primary,
           },
         ]}
-        onPress={() => handlePress(label)}
+        onPress={() => handlePress(label as "7 days" | "1 month" | "12 months")}
       >
         <Text
           style={{

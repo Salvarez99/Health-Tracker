@@ -12,8 +12,13 @@ import * as Local from "../../localDB/InitializeLocal";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { convertToDbDateFormat, convertMMMDDYYYY } from "@/Helpers/helpers";
+import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
 
 export default function recordWeight() {
+
+  const userPreferences = useContext(UserPreferencesContext);
+  if (!userPreferences) throw new Error('UserPreferencesContext must be used within UserPreferencesProvider');
+
   const router = useRouter();
   const { date: item_date } = useLocalSearchParams();
   const [units, setUnits] = useState("lbs");
@@ -136,7 +141,7 @@ export default function recordWeight() {
 
           <Picker
             selectedValue={units}
-            onValueChange={(itemValue) => setUnits(itemValue)}
+            onValueChange={(itemValue) => userPreferences.setUnits(itemValue as "lbs" | "kgs")}
             style={[styles.picker, { color: theme.colors.textColor }]}
             itemStyle={styles.pickerItem}
           >
