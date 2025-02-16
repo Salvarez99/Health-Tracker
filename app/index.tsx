@@ -11,7 +11,7 @@ import { useRouter, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState, useContext } from "react";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import { ChartFilterContext } from "@/contexts/ChartFilterContext";
-import { useUnits } from "@/components/UnitsContext";
+import { useUnits } from "@/contexts/UnitsContext";
 import { DataPoint, recordItem } from "@/types/types";
 import {
   convertMMMDDYYYY,
@@ -23,63 +23,68 @@ import * as Local from "../localDB/InitializeLocal";
 import WeightGraph from "@/components/WeightGraph";
 import ChartFilterButtons from "@/components/ChartFilterButtons";
 import { filterRanges } from "@/constants/filterRanges";
+import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
 
 export default function Index() {
   const router = useRouter();
   const theme = useContext(ThemeContext);
-  const filterContext = useContext(ChartFilterContext);
-  const { units, setUnits } = useUnits();
+  const userPreferences = useContext(UserPreferencesContext);
+  if (!userPreferences) throw new Error('UserPreferencesContext must be used within UserPreferencesProvider');
+  // const filterContext = useContext(ChartFilterContext);
+  // const { units, setUnits } = useUnits();
 
   const [initialized, setInitialized] = useState(false);
 
   const [date, setDate] = useState<string | null>(null);
   const [rangeDate, setRangeDate] = useState<string | null>(null);
-  
+
   const [listData, setlistData] = useState<recordItem[]>([]);
   const [graphData, setGraphData] = useState<DataPoint[]>([]);
 
-  if (!filterContext) {
-    throw new Error(
-      "ChartFilterButtons must be used within a ChartFilterProvider"
-    );
-  }
+  // if (!filterContext) {
+  //   throw new Error(
+  //     "ChartFilterButtons must be used within a ChartFilterProvider"
+  //   );
+  // }
 
   const getUserPrefs = async () => {
     const user = await Local.fetchUserPrefs();
     const initialUnits = user.units || "lbs";
-    setUnits(initialUnits);
+    // setUnits(initialUnits);
   };
-  
-    const getCurrentDate = async () => {
-      const currentDate = new Date();
-      const formattedDate = convertToDbDateFormat(currentDate);
-      await setDate(formattedDate);
-      return formattedDate;
-    };
+
+  const getCurrentDate = async () => {
+    const currentDate = new Date();
+    const formattedDate = convertToDbDateFormat(currentDate);
+    await setDate(formattedDate);
+    return formattedDate;
+  };
 
   const getFilterDate = async () => {
-    const formattedDate = await getCurrentDate(); 
-  
-    const { filter } = filterContext;
+    const formattedDate = await getCurrentDate();
+
+    const filter  = await userPreferences.filter;
     const range = filterRanges[filter];
     const dateRange = getRange(formattedDate, range);
     return dateRange;
   };
-  
 
   const loadWeights = async () => {
     const currentDate = await getCurrentDate();
     const dateRange = await getFilterDate();
-  
-    const fetchedWeights = await Local.fetchWeightsAfterDate(dateRange, currentDate);
+
+    const fetchedWeights = await Local.fetchWeightsAfterDate(
+      dateRange,
+      currentDate
+    );
     const reversedWeights = [...fetchedWeights].reverse();
-  
+
     const dataPoints: DataPoint[] = fetchedWeights.map((item: recordItem) => ({
       label: convertToMMDD(item.date),
-      value: units === "lbs" ? item.weight_lbs : item.weight_kgs,
+      value: userPreferences.units === "lbs" ? item.weight_lbs : item.weight_kgs,
       secondaryLabel: "asd",
     }));
-  
+
     setlistData([...reversedWeights]);
     setGraphData([...dataPoints]);
   };
@@ -87,37 +92,29 @@ export default function Index() {
   //On startup, get user prefs and weights
   useEffect(() => {
     const handleStart = async () => {
-      if (initialized) return; // Prevent multiple runs
-        setInitialized(true);
-      await loadWeights();
+      await loadWeights(); 
     };
-  
     Local.createTable();
-    getUserPrefs();
     handleStart();
-  }, [initialized]);
+  }, []);
   
   //On focus, get weights
   useFocusEffect(
     useCallback(() => {
       const handleFocus = async () => {
-        
-        await loadWeights(); 
+        await loadWeights();
       };
-      
-      if (!initialized) return;
+
       handleFocus();
-    }, [initialized])
+    }, [])
   );
 
   useEffect(() => {
     const handleFilterChange = async () => {
       await loadWeights();
     };
-    
-    if (!initialized) return;
     handleFilterChange();
-  }, [filterContext.filter]);
+  }, [userPreferences.filter]);
 
   const onItemPress = (item: recordItem) => {
     console.log(`id: ${item.id} | date: ${item.date}`);
@@ -139,7 +136,7 @@ export default function Index() {
         onPress={() => onItemPress(item)}
       >
         <Text style={{ color: theme.colors.textColor }}>
-          {units === "lbs"
+          {userPreferences.units === "lbs"
             ? `${item.weight_lbs} lbs`
             : `${item.weight_kgs} kgs`}
         </Text>

@@ -23,11 +23,12 @@ export const UserPreferencesProvider = ({
     const loadUserPreferences = async () => {
       try {
         await Local.createUserPrefs();
-        const UserPreferences = await Local.fetchUserPrefs();
-        if (UserPreferences) {
-          setTheme(UserPreferences.theme);
-          setUnits(UserPreferences.units);
-          setFilter(UserPreferences.filter);
+        const userPreferences = await Local.fetchUserPrefs();
+        console.log("UserPreferences:", userPreferences);
+        if (userPreferences) {
+          setTheme(userPreferences.theme_mode);
+          setUnits(userPreferences.units);
+          setFilter(userPreferences.filterRange);
         }
       } catch (error) {
         console.error("Failed to load preferences:", error);

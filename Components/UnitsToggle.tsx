@@ -1,33 +1,30 @@
 import { useState, useContext, useEffect } from "react";
 import { View, Text, Switch, StyleSheet } from "react-native";
-import { useUnits } from "./UnitsContext";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import * as Local from "../localDB/InitializeLocal";
+import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
 
 export default function UnitsToggle() {
-  const { units, setUnits } = useUnits();
-  // const [units, setUnits ] = useState("lbs");
+  const userPreferences = useContext(UserPreferencesContext);
+  if (!userPreferences)
+    throw new Error(
+      "UserPreferencesContext must be used within UserPreferencesProvider"
+    );
+
   const [isEnabled, setIsEnabled] = useState(false);
   const theme = useContext(ThemeContext);
 
   const toggleSwitch = async () => {
-    const newUnits = isEnabled ? "lbs" : "kgs";
+    const newUnits: "lbs" | "kgs" = isEnabled ? "lbs" : "kgs";
     setIsEnabled(!isEnabled);
     await Local.updateUnits(newUnits);
-    setUnits(newUnits);
+    await userPreferences.setUnits(newUnits);
   };
 
   const textColor = { color: theme.colors.textColor };
 
-  const getUserPrefs = async () => {
-    const user = await Local.fetchUserPrefs();
-    const initialUnits = user.units || "lbs"; 
-    setUnits(initialUnits);
-    setIsEnabled(initialUnits === 'kgs')
-  }
-
   useEffect(() => {
-    getUserPrefs();
+    setIsEnabled(userPreferences.units === "kgs" ? true : false);
   }, []);
 
   return (
