@@ -2,9 +2,9 @@
   "expo": {
     "name": "health-app",
     "slug": "health-app",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/app-logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
