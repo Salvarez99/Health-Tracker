@@ -27,8 +27,10 @@ export default function Index() {
   const router = useRouter();
   const theme = useContext(ThemeContext);
   const userPreferences = useContext(UserPreferencesContext);
-  if (!userPreferences) throw new Error('UserPreferencesContext must be used within UserPreferencesProvider');
-
+  if (!userPreferences)
+    throw new Error(
+      "UserPreferencesContext must be used within UserPreferencesProvider"
+    );
 
   const [date, setDate] = useState<string | null>(null);
 
@@ -45,7 +47,7 @@ export default function Index() {
   const getFilterDate = async () => {
     const formattedDate = await getCurrentDate();
 
-    const filter  = await userPreferences.filter;
+    const filter = await userPreferences.filter;
     const range = filterRanges[filter];
     const dateRange = getRange(formattedDate, range);
     return dateRange;
@@ -63,7 +65,8 @@ export default function Index() {
 
     const dataPoints: DataPoint[] = fetchedWeights.map((item: recordItem) => ({
       label: convertToMMDD(item.date),
-      value: userPreferences.units === "lbs" ? item.weight_lbs : item.weight_kgs,
+      value:
+        userPreferences.units === "lbs" ? item.weight_lbs : item.weight_kgs,
       secondaryLabel: "asd",
     }));
 
@@ -74,12 +77,12 @@ export default function Index() {
   //On startup, get user prefs and weights
   useEffect(() => {
     const handleStart = async () => {
-      await loadWeights(); 
+      await loadWeights();
     };
     Local.createTable();
     handleStart();
   }, []);
-  
+
   //On focus, get weights
   useFocusEffect(
     useCallback(() => {
@@ -93,10 +96,12 @@ export default function Index() {
 
   useEffect(() => {
     const handleFilterChange = async () => {
+      const user = await Local.fetchUserPrefs();
+      await userPreferences.setUnits(user.units);
       await loadWeights();
     };
     handleFilterChange();
-  }, [userPreferences.filter]);
+  }, [userPreferences.filter, userPreferences.units]);
 
   const onItemPress = (item: recordItem) => {
     console.log(`id: ${item.id} | date: ${item.date}`);
