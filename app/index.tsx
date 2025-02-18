@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   ListRenderItem,
+  Dimensions,
 } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState, useContext } from "react";
@@ -26,6 +27,8 @@ import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
 export default function Index() {
   const router = useRouter();
   const theme = useContext(ThemeContext);
+  const screenHeight = Dimensions.get("window").height;
+
   const userPreferences = useContext(UserPreferencesContext);
   if (!userPreferences)
     throw new Error(
@@ -135,9 +138,13 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <WeightGraph data={graphData} />
-      <ChartFilterButtons />
+    <View style={styles.container}>
+      <View style={{ height: screenHeight * 0.38 }}>
+        <WeightGraph data={graphData} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <ChartFilterButtons />
+      </View>
       <View
         style={[
           styles.recordsView,
@@ -170,21 +177,22 @@ export default function Index() {
           </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#D9D9D9",
   },
   recordsView: {
     flex: 6,
     backgroundColor: "#D9D9D9",
   },
   footer: {
-    flex: 1,
+    flex: 1.2,
     backgroundColor: "#D9D9D9",
     justifyContent: "center",
     alignItems: "center",
@@ -205,8 +213,8 @@ const styles = StyleSheet.create({
     padding: 15,
     flexDirection: "row",
     justifyContent: "space-between",
-    elevation: 5,
     borderRadius: 5,
     margin: 4,
+    elevation: 5,
   },
 });

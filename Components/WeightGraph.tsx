@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text ,StyleSheet } from "react-native";
+import { View, Text ,StyleSheet, Dimensions } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 import { DataPoint } from "@/types/types";
 import { ThemeContext } from "@/contexts/ThemeContext";
@@ -10,6 +10,8 @@ type props = {
 
 const WeightGraph: React.FC<props> = ({ data }) => {
   const theme = React.useContext(ThemeContext);
+  const screenWidth = Dimensions.get("window").width;
+  const screenHeight = Dimensions.get("window").height;
 
   return (
     <View
@@ -21,30 +23,27 @@ const WeightGraph: React.FC<props> = ({ data }) => {
       <LineChart
         areaChart
         initialSpacing={0}
-        spacing={80}
-        width={390}
+        spacing={screenWidth * 0.2} // Adjust spacing dynamically
+        width={screenWidth * 0.9} // 90% of screen width
+        height={screenHeight * 0.3} // 30% of screen height
         data={data}
         hideRules={false}
-        // isAnimated={true}
         thickness={2}
         yAxisColor={theme.chartPallete.axisColor}
         xAxisColor={theme.chartPallete.axisColor}
         color={theme.chartPallete.chartLineColor}
-        curved={true}
+        curved
         dataPointsRadius={4}
         dataPointsColor={theme.chartPallete.chartLineColor}
         startOpacity={0.5}
         endOpacity={0.2}
         rulesColor={theme.chartPallete.axisColor}
-        rulesType={"solid"}
+        rulesType="solid"
         yAxisTextStyle={{ color: theme.colors.textColor }}
-        // xAxisIndicesColor={theme.colors.textColor}
         xAxisLabelTextStyle={{ color: theme.colors.textColor }}
         scrollToEnd
-        animateOnDataChange={true}
-        // focusedDataPointColor={"red"}
-        focusEnabled={true}
-        // onFocus={renderDataPoint}
+        animateOnDataChange
+        focusEnabled
         unFocusOnPressOut
         delayBeforeUnFocus={1300}
       />
@@ -54,10 +53,11 @@ const WeightGraph: React.FC<props> = ({ data }) => {
 
 const styles = StyleSheet.create({
   chartView: {
-    flex: 4,
-    elevation: 5,
+    flex: 1,
+    height: 200, // Ensure the parent container has a fixed height
     paddingTop: 10,
-    paddingLeft: 5,
+    paddingHorizontal: 2,
+    alignSelf: "stretch", // Ensures it expands within its parent
   },
 });
 

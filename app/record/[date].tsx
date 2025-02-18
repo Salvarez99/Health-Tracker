@@ -15,9 +15,11 @@ import { convertToDbDateFormat, convertMMMDDYYYY } from "@/Helpers/helpers";
 import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
 
 export default function recordWeight() {
-
   const userPreferences = useContext(UserPreferencesContext);
-  if (!userPreferences) throw new Error('UserPreferencesContext must be used within UserPreferencesProvider');
+  if (!userPreferences)
+    throw new Error(
+      "UserPreferencesContext must be used within UserPreferencesProvider"
+    );
 
   const router = useRouter();
   const { date: item_date } = useLocalSearchParams();
@@ -68,13 +70,16 @@ export default function recordWeight() {
   };
 
   return (
+    
     <View
       style={[
         styles.mainContainer,
         { backgroundColor: theme.colors.backgroundColor },
       ]}
     >
-      <View style={styles.form}>
+      <View
+        style={[styles.form, { backgroundColor: theme.colors.backgroundColor }]}
+      >
         <View
           style={[
             styles.formHeader,
@@ -119,7 +124,7 @@ export default function recordWeight() {
           <View
             style={[
               styles.textInContainer,
-              { backgroundColor: theme.colors.secondary },
+              {flex :1,  backgroundColor: theme.colors.secondary },
             ]}
           >
             <TextInput
@@ -133,22 +138,32 @@ export default function recordWeight() {
                   textAlign: "center",
                   textAlignVertical: "center",
                   fontSize: 16,
+                  zIndex: 2,
                 },
                 { color: theme.colors.textColor },
               ]}
             />
           </View>
-
-          <Picker
-            selectedValue={units}
-            onValueChange={(itemValue) => userPreferences.setUnits(itemValue as "lbs" | "kgs")}
-            style={[styles.picker, { color: theme.colors.textColor }]}
-            itemStyle={styles.pickerItem}
-          >
-            <Picker.Item label="lbs" value="lbs" />
-            <Picker.Item label="kgs" value="kgs" />
-          </Picker>
-
+          <View style={{flex :2.5, marginTop: 5, paddingLeft: 0, marginLeft: 0 }}>
+            <Picker
+              selectedValue={userPreferences.units}
+              onValueChange={(itemValue) =>
+                userPreferences.setUnits(itemValue as "lbs" | "kgs")
+              }
+              style={[styles.picker, { color: theme.colors.textColor }]}
+              itemStyle={styles.pickerItem}
+            >
+              <Picker.Item label="lbs" value="lbs" />
+              <Picker.Item label="kgs" value="kgs" />
+            </Picker>
+          </View>
+        </View>
+        <View
+          style={[
+            styles.formFooter,
+            { backgroundColor: theme.colors.secondary },
+          ]}
+        >
           <TouchableOpacity
             style={[
               styles.recordButton,
@@ -163,6 +178,7 @@ export default function recordWeight() {
             </Text>
           </TouchableOpacity>
         </View>
+        <View style={{ flex: 1, backgroundColor: theme.colors.backgroundColor }}></View>
       </View>
     </View>
   );
@@ -175,12 +191,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   form: {
+    flex: 5,
     position: "absolute",
+    padding: 10,
     paddingTop: 10,
     width: 370,
     height: 350,
     borderRadius: 7,
-    borderWidth: 1,
+    // borderWidth: 1,
   },
   formHeader: {
     backgroundColor: "#F0F0F0",
@@ -193,6 +211,14 @@ const styles = StyleSheet.create({
   formBody: {
     backgroundColor: "#D9D9D9",
     flex: 6,
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  formFooter: {
+    flex: 1,
+    alignItems: "flex-end",
+    paddingTop: 10,
+    paddingRight: 10,
     borderBottomLeftRadius: 7,
     borderBottomRightRadius: 7,
   },
@@ -202,9 +228,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   recordButton: {
-    position: "absolute",
-    bottom: 12,
-    right: 12,
     backgroundColor: "#F0F0F0",
     height: 30,
     width: 80,
@@ -217,28 +240,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   textInContainer: {
-    position: "absolute",
-    margin: 10,
-    marginTop: 20,
     backgroundColor: "white",
+    margin: 0,
+    marginLeft: 7,
+    marginTop: 20,
     width: 100,
-    height: 28,
+    height: 25,
     borderWidth: 1,
     borderRadius: 2,
   },
   picker: {
-    position: "absolute",
-    left: 100,
-    top: 5,
     width: 110,
     height: 28,
-    padding: 0,
-    margin: 0,
   },
   pickerItem: {
-    height: 28,
-    width: 110,
-    fontSize: 14,
-    justifyContent: "center",
+    // height: 28,
+    // width: 50,
+    // fontSize: 14,
+    // justifyContent: "center",
   },
 });

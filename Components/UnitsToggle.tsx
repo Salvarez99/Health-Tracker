@@ -16,7 +16,7 @@ export default function UnitsToggle() {
 
   const toggleSwitch = async () => {
     const newUnits: "lbs" | "kgs" = isEnabled ? "lbs" : "kgs";
-    setIsEnabled(!isEnabled);
+    await setIsEnabled(!isEnabled);
     await Local.updateUnits(newUnits);
     await userPreferences.setUnits(newUnits);
   };
@@ -25,7 +25,7 @@ export default function UnitsToggle() {
 
   useEffect(() => {
     setIsEnabled(userPreferences.units === "kgs" ? true : false);
-  }, []);
+  }, [userPreferences.units]);
 
   return (
     <View style={styles.container}>

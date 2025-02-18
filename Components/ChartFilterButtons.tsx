@@ -42,7 +42,7 @@ export default function ChartFilterButtons() {
         onPress={() => handlePress(label as "7 days" | "1 month" | "12 months")}
       >
         <Text
-          style={{
+          style={{padding: 0, margin: 0, textAlign: "center",
             color: isSelected ? theme.colors.primary : theme.colors.textColor,
           }}
         >
@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    padding: 0,
     borderRadius: 20,
     width: '32%',
-    height: 38,
+    height: 34,
     elevation : 5
   },
 });
