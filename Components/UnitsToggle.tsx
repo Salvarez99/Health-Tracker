@@ -1,31 +1,31 @@
-import { useState, useContext, useEffect } from "react";
-import { View, Text, Switch, StyleSheet } from "react-native";
-import { ThemeContext } from "@/contexts/ThemeContext";
-import * as Local from "../localDB/InitializeLocal";
-import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
+import { ThemeContext } from "@/contexts/ThemeContext"
+import { UserPreferencesContext } from "@/contexts/UserPreferencesContext"
+import { useContext, useEffect, useState } from "react"
+import { StyleSheet, Switch, Text, View } from "react-native"
+import * as Local from "../LocalDB/InitializeLocal"
 
 export default function UnitsToggle() {
-  const userPreferences = useContext(UserPreferencesContext);
+  const userPreferences = useContext(UserPreferencesContext)
   if (!userPreferences)
     throw new Error(
-      "UserPreferencesContext must be used within UserPreferencesProvider"
-    );
+      "UserPreferencesContext must be used within UserPreferencesProvider",
+    )
 
-  const [isEnabled, setIsEnabled] = useState(false);
-  const theme = useContext(ThemeContext);
+  const [isEnabled, setIsEnabled] = useState(false)
+  const theme = useContext(ThemeContext)
 
   const toggleSwitch = async () => {
-    const newUnits: "lbs" | "kgs" = isEnabled ? "lbs" : "kgs";
-    await setIsEnabled(!isEnabled);
-    await Local.updateUnits(newUnits);
-    await userPreferences.setUnits(newUnits);
-  };
+    const newUnits: "lbs" | "kgs" = isEnabled ? "lbs" : "kgs"
+    await setIsEnabled(!isEnabled)
+    await Local.updateUnits(newUnits)
+    await userPreferences.setUnits(newUnits)
+  }
 
-  const textColor = { color: theme.colors.textColor };
+  const textColor = { color: theme.colors.textColor }
 
   useEffect(() => {
-    setIsEnabled(userPreferences.units === "kgs" ? true : false);
-  }, [userPreferences.units]);
+    setIsEnabled(userPreferences.units === "kgs" ? true : false)
+  }, [userPreferences.units])
 
   return (
     <View style={styles.container}>
@@ -43,7 +43,7 @@ export default function UnitsToggle() {
       />
       <Text style={[styles.text, textColor]}>kgs</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
   switch: {
     marginHorizontal: 2,
   },
-});
+})

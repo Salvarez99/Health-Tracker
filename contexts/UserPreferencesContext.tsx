@@ -1,51 +1,51 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
-import * as Local from "../localDB/InitializeLocal";
-import { UserPreferences } from "../types/types";
-import { ActivityIndicator, View, StyleSheet } from "react-native";
+import { createContext, ReactNode, useEffect, useState } from "react"
+import { ActivityIndicator, StyleSheet, View } from "react-native"
+import * as Local from "../LocalDB/InitializeLocal"
+import { UserPreferences } from "../types/types"
 
 export const UserPreferencesContext = createContext<
   UserPreferences | undefined
->(undefined);
+>(undefined)
 
 export const UserPreferencesProvider = ({
   children,
 }: {
-  children: ReactNode;
+  children: ReactNode
 }) => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [units, setUnits] = useState<"lbs" | "kgs">("lbs");
+  const [theme, setTheme] = useState<"light" | "dark">("light")
+  const [units, setUnits] = useState<"lbs" | "kgs">("lbs")
   const [filter, setFilter] = useState<"7 days" | "1 month" | "12 months">(
-    "7 days"
-  );
-  const [loading, setLoading] = useState(true);
+    "7 days",
+  )
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const loadUserPreferences = async () => {
       try {
-        await Local.createUserPrefs();
-        const userPreferences = await Local.fetchUserPrefs();
-        console.log("UserPreferences:", userPreferences);
+        await Local.createUserPrefs()
+        const userPreferences = await Local.fetchUserPrefs()
+        console.log("UserPreferences:", userPreferences)
         if (userPreferences) {
-          setTheme(userPreferences.theme_mode);
-          setUnits(userPreferences.units);
-          setFilter(userPreferences.filterRange);
+          setTheme(userPreferences.theme_mode)
+          setUnits(userPreferences.units)
+          setFilter(userPreferences.filterRange)
         }
       } catch (error) {
-        console.error("Failed to load preferences:", error);
+        console.error("Failed to load preferences:", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    console.log("Loading user preferences...");
-    loadUserPreferences();
-  }, []);
+    }
+    console.log("Loading user preferences...")
+    loadUserPreferences()
+  }, [])
 
   if (loading) {
     return (
       <View style={[styles.container, { backgroundColor: "#FFF" }]}>
         <ActivityIndicator size="large" color="#333" />
       </View>
-    );
+    )
   }
 
   return (
@@ -54,8 +54,8 @@ export const UserPreferencesProvider = ({
     >
       {children}
     </UserPreferencesContext.Provider>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-});
+})

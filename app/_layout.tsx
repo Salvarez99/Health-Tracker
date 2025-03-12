@@ -1,33 +1,33 @@
-import { Stack } from "expo-router";
-import React, { useEffect, useState } from "react";
-import UnitsToggle from "@/components/UnitsToggle";
-import { darkTheme } from "@/themes/DarkTheme";
-import { lightTheme } from "@/themes/LightTheme";
-import { ThemeContext } from "@/contexts/ThemeContext";
-import * as Local from "../localDB/InitializeLocal";
-import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
+import { ThemeContext } from "@/contexts/ThemeContext"
+import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext"
+import { darkTheme } from "@/Themes/DarkTheme"
+import { lightTheme } from "@/Themes/LightTheme"
+import { Stack } from "expo-router"
+import React, { useState } from "react"
+import UnitsToggle from "../components/UnitsToggle"
+import * as Local from "../LocalDB/InitializeLocal"
 
 export default function RootLayout() {
-  const [theme, setTheme] = useState(lightTheme);
+  const [theme, setTheme] = useState(lightTheme)
 
   const headerStyle = {
     backgroundColor: theme.colors.tertiary,
     elevation: 10,
-  };
+  }
 
   const headerTitleStyle = {
     color: theme.colors.textColor,
-  };
+  }
 
   const getUserPrefs = async () => {
-    const user = await Local.fetchUserPrefs();
-    console.log("User theme mode:", user.theme_mode);
+    const user = await Local.fetchUserPrefs()
+    console.log("User theme mode:", user.theme_mode)
     if (user.theme_mode === "dark") {
-      setTheme(darkTheme);
+      setTheme(darkTheme)
     } else {
-      setTheme(lightTheme);
+      setTheme(lightTheme)
     }
-  };
+  }
 
   return (
     <UserPreferencesProvider>
@@ -53,5 +53,5 @@ export default function RootLayout() {
         </Stack>
       </ThemeContext.Provider>
     </UserPreferencesProvider>
-  );
+  )
 }

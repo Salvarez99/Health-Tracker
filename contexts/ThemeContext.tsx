@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { typeTheme } from "@/types/types";
-import { darkTheme } from "@/themes/DarkTheme";
+import { darkTheme } from "@/Themes/DarkTheme"
+import { typeTheme } from "@/types/types"
+import { createContext } from "react"
 
-export const ThemeContext = createContext<typeTheme>(darkTheme);
+export const ThemeContext = createContext<typeTheme>(darkTheme)
