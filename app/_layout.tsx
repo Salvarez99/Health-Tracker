@@ -1,11 +1,11 @@
 import { ThemeContext } from "@/contexts/ThemeContext"
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext"
-import { darkTheme } from "@/Themes/DarkTheme"
-import { lightTheme } from "@/Themes/LightTheme"
+import { darkTheme } from "@/themes/DarkTheme"
+import { lightTheme } from "@/themes/LightTheme"
 import { Stack } from "expo-router"
 import React, { useState } from "react"
 import UnitsToggle from "../components/UnitsToggle"
-import * as Local from "../LocalDB/InitializeLocal"
+import * as Local from "../localDB/InitializeLocal"
 
 export default function RootLayout() {
   const [theme, setTheme] = useState(lightTheme)

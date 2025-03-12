@@ -1,73 +1,73 @@
-import { convertMMMDDYYYY, convertToDbDateFormat } from "@/Helpers/helpers"
-import { ThemeContext } from "@/contexts/ThemeContext"
-import { UserPreferencesContext } from "@/contexts/UserPreferencesContext"
-import DateTimePicker from "@react-native-community/datetimepicker"
-import { Picker } from "@react-native-picker/picker"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import React, { useContext, useEffect, useState } from "react"
+import { convertMMMDDYYYY, convertToDbDateFormat } from "@/helpers/helpers";
+import { ThemeContext } from "@/contexts/ThemeContext";
+import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native"
-import * as Local from "../../LocalDB/InitializeLocal"
+} from "react-native";
+import * as Local from "../../localDB/InitializeLocal";
 
 export default function recordWeight() {
-  const userPreferences = useContext(UserPreferencesContext)
+  const userPreferences = useContext(UserPreferencesContext);
   if (!userPreferences)
     throw new Error(
-      "UserPreferencesContext must be used within UserPreferencesProvider",
-    )
+      "UserPreferencesContext must be used within UserPreferencesProvider"
+    );
 
-  const router = useRouter()
-  const { date: item_date } = useLocalSearchParams()
-  const [units, setUnits] = useState("lbs")
-  const [weight, onChangeWeight] = useState("")
-  const [date, setDate] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
-  const theme = useContext(ThemeContext)
-  const dateObj = new Date()
-  const [isMatch, setIsMatch] = useState(false)
+  const router = useRouter();
+  const { date: item_date } = useLocalSearchParams();
+  const [units, setUnits] = useState("lbs");
+  const [weight, onChangeWeight] = useState("");
+  const [date, setDate] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const theme = useContext(ThemeContext);
+  const dateObj = new Date();
+  const [isMatch, setIsMatch] = useState(false);
 
-  const pattern: RegExp = /^[0-9]{3}\.?[0-9]{0,2}$/
+  const pattern: RegExp = /^[0-9]{3}\.?[0-9]{0,2}$/;
 
   useEffect(() => {
     if (item_date) {
-      setDate(item_date as string)
+      setDate(item_date as string);
     }
-  }, [])
+  }, []);
 
   const onRecord = async () => {
-    const m = pattern.test(weight)
-    setIsMatch(m)
+    const m = pattern.test(weight);
+    setIsMatch(m);
 
     if (!m) {
-      alert("Incorrect format inputted for weight.")
+      alert("Incorrect format inputted for weight.");
     } else {
-      console.log("weight: " + weight + " " + units)
-      let weights: Number[] = convertWeight(units)
+      console.log("weight: " + weight + " " + units);
+      let weights: Number[] = convertWeight(units);
       if (await Local.dateExist(date)) {
-        await Local.updateWeight(date, weights[0], weights[1])
+        await Local.updateWeight(date, weights[0], weights[1]);
       } else {
-        await Local.insertWeight(weights[0], weights[1], date)
+        await Local.insertWeight(weights[0], weights[1], date);
       }
-      router.back()
+      router.back();
     }
-  }
+  };
 
   const convertWeight = (units: string): number[] => {
-    let weights: number[] = [] //[lbs, kgs]
+    let weights: number[] = []; //[lbs, kgs]
     if (units === "lbs") {
       //convert to kgs
-      weights = [Number(weight), Number((Number(weight) / 2.205).toFixed(2))]
+      weights = [Number(weight), Number((Number(weight) / 2.205).toFixed(2))];
     } else {
       //convert to lbs
-      weights = [Number((Number(weight) / 2.205).toFixed(2)), Number(weight)]
+      weights = [Number((Number(weight) / 2.205).toFixed(2)), Number(weight)];
     }
-    return weights
-  }
+    return weights;
+  };
 
   return (
     <View
@@ -100,10 +100,10 @@ export default function recordWeight() {
                 value={dateObj}
                 maximumDate={dateObj}
                 onChange={(event, selectedDate) => {
-                  const currentDate = selectedDate || dateObj
-                  const formattedDate = convertToDbDateFormat(currentDate)
-                  setIsOpen(false)
-                  setDate(formattedDate)
+                  const currentDate = selectedDate || dateObj;
+                  const formattedDate = convertToDbDateFormat(currentDate);
+                  setIsOpen(false);
+                  setDate(formattedDate);
                 }}
               />
             </>
@@ -148,7 +148,7 @@ export default function recordWeight() {
           >
             <Picker
               selectedValue={userPreferences.units}
-              onValueChange={itemValue =>
+              onValueChange={(itemValue) =>
                 userPreferences.setUnits(itemValue as "lbs" | "kgs")
               }
               style={[styles.picker, { color: theme.colors.textColor }]}
@@ -184,7 +184,7 @@ export default function recordWeight() {
         ></View>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -262,4 +262,4 @@ const styles = StyleSheet.create({
     // fontSize: 14,
     // justifyContent: "center",
   },
-})
+});

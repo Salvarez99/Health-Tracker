@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from "react"
 import { ActivityIndicator, StyleSheet, View } from "react-native"
-import * as Local from "../LocalDB/InitializeLocal"
+import * as Local from "../localDB/InitializeLocal"
 import { UserPreferences } from "../types/types"
 
 export const UserPreferencesContext = createContext<

@@ -2,7 +2,7 @@ import { ThemeContext } from "@/contexts/ThemeContext"
 import { UserPreferencesContext } from "@/contexts/UserPreferencesContext"
 import { useContext, useEffect, useState } from "react"
 import { StyleSheet, Switch, Text, View } from "react-native"
-import * as Local from "../LocalDB/InitializeLocal"
+import * as Local from "../localDB/InitializeLocal"
 
 export default function UnitsToggle() {
   const userPreferences = useContext(UserPreferencesContext)
