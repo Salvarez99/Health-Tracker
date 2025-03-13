@@ -1,18 +1,18 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
-import React, { useEffect, useState, useContext } from "react";
-import { Picker } from "@react-native-picker/picker";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import * as Local from "../../localDB/InitializeLocal";
+import { convertMMMDDYYYY, convertToDbDateFormat } from "@/helpers/helpers";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { convertToDbDateFormat, convertMMMDDYYYY } from "@/Helpers/helpers";
 import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import * as Local from "../../localDB/InitializeLocal";
 
 export default function recordWeight() {
   const userPreferences = useContext(UserPreferencesContext);
@@ -70,7 +70,6 @@ export default function recordWeight() {
   };
 
   return (
-    
     <View
       style={[
         styles.mainContainer,
@@ -124,7 +123,7 @@ export default function recordWeight() {
           <View
             style={[
               styles.textInContainer,
-              {flex :1,  backgroundColor: theme.colors.secondary },
+              { flex: 1, backgroundColor: theme.colors.secondary },
             ]}
           >
             <TextInput
@@ -144,7 +143,9 @@ export default function recordWeight() {
               ]}
             />
           </View>
-          <View style={{flex :2.5, marginTop: 5, paddingLeft: 0, marginLeft: 0 }}>
+          <View
+            style={{ flex: 2.5, marginTop: 5, paddingLeft: 0, marginLeft: 0 }}
+          >
             <Picker
               selectedValue={userPreferences.units}
               onValueChange={(itemValue) =>
@@ -178,7 +179,9 @@ export default function recordWeight() {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, backgroundColor: theme.colors.backgroundColor }}></View>
+        <View
+          style={{ flex: 1, backgroundColor: theme.colors.backgroundColor }}
+        ></View>
       </View>
     </View>
   );

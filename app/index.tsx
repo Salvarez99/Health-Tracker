@@ -1,28 +1,27 @@
-import {
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  ListRenderItem,
-  Dimensions,
-} from "react-native";
-import { useRouter, useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState, useContext } from "react";
+import { filterRanges } from "@/constants/filterRanges";
 import { ThemeContext } from "@/contexts/ThemeContext";
-import { DataPoint, recordItem } from "@/types/types";
+import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
 import {
   convertMMMDDYYYY,
-  convertToMMDD,
   convertToDbDateFormat,
+  convertToMMDD,
   getRange,
-} from "@/Helpers/helpers";
+} from "@/helpers/helpers";
+import { DataPoint, recordItem } from "@/types/types";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  Dimensions,
+  FlatList,
+  ListRenderItem,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import ChartFilterButtons from "../components/ChartFilterButtons";
+import WeightGraph from "../components/WeightGraph";
 import * as Local from "../localDB/InitializeLocal";
-import WeightGraph from "@/components/WeightGraph";
-import ChartFilterButtons from "@/components/ChartFilterButtons";
-import { filterRanges } from "@/constants/filterRanges";
-import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
 
 export default function Index() {
   const router = useRouter();

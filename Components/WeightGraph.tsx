@@ -1,17 +1,17 @@
-import React from "react";
-import { View, Text ,StyleSheet, Dimensions } from "react-native";
-import { LineChart } from "react-native-gifted-charts";
-import { DataPoint } from "@/types/types";
-import { ThemeContext } from "@/contexts/ThemeContext";
+import { ThemeContext } from "@/contexts/ThemeContext"
+import { DataPoint } from "@/types/types"
+import React from "react"
+import { Dimensions, StyleSheet, View } from "react-native"
+import { LineChart } from "react-native-gifted-charts"
 
 type props = {
-  data: DataPoint[];
-};
+  data: DataPoint[]
+}
 
 const WeightGraph: React.FC<props> = ({ data }) => {
-  const theme = React.useContext(ThemeContext);
-  const screenWidth = Dimensions.get("window").width;
-  const screenHeight = Dimensions.get("window").height;
+  const theme = React.useContext(ThemeContext)
+  const screenWidth = Dimensions.get("window").width * 0.9
+  const screenHeight = Dimensions.get("window").height
 
   return (
     <View
@@ -48,8 +48,8 @@ const WeightGraph: React.FC<props> = ({ data }) => {
         delayBeforeUnFocus={1300}
       />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   chartView: {
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
     alignSelf: "stretch", // Ensures it expands within its parent
   },
-});
+})
 
-export default WeightGraph;
+export default WeightGraph
