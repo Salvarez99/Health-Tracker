@@ -2,7 +2,6 @@ node_modules/
 .expo/
 dist/
 .env
-keys.tsx
 npm-debug.*
 *.jks
 *.p8
@@ -13,6 +12,8 @@ npm-debug.*
 web-build/
 google-services.json
 GoogleService-Info.plist
+services/keys.tsx
+
 # macOS
 .DS_Store
 
