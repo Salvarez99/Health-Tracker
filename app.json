@@ -14,6 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.salvarez99.healthapp",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -24,7 +25,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.salvarez99.healthapp"
+      "package": "com.salvarez99.healthapp",
+      "expo.android.googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
