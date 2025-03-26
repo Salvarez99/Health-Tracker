@@ -1,9 +1,11 @@
 import { ThemeContext } from "@/contexts/ThemeContext"
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext"
+import { store } from "@/services/store"
 import { darkTheme } from "@/themes/DarkTheme"
 import { lightTheme } from "@/themes/LightTheme"
-import { Stack } from "expo-router"
-import React, { useState } from "react"
+import { Tabs } from "expo-router"
+import React, { useEffect, useState } from "react"
+import { Provider } from "react-redux"
 import UnitsToggle from "../components/UnitsToggle"
 import * as Local from "../localDB/InitializeLocal"
 
@@ -29,29 +31,38 @@ export default function RootLayout() {
     }
   }
 
+  useEffect(() => {
+    getUserPrefs()
+  }, [])
+
   return (
-    <UserPreferencesProvider>
-      <ThemeContext.Provider value={lightTheme}>
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              headerRight: () => <UnitsToggle />,
-              title: "Index",
-              headerStyle: headerStyle,
-              headerTitleStyle: headerTitleStyle,
+    <Provider store={store}>
+      <UserPreferencesProvider>
+        <ThemeContext.Provider value={theme}>
+          <Tabs
+            screenOptions={{
+              headerStyle,
+              headerTitleStyle,
+              tabBarActiveTintColor: theme.colors.textColor,
+              tabBarStyle: { backgroundColor: theme.colors.tertiary },
             }}
-          />
-          <Stack.Screen
-            name="record/[date]"
-            options={{
-              title: "Record Weight",
-              headerStyle: headerStyle,
-              headerTitleStyle: headerTitleStyle,
-            }}
-          />
-        </Stack>
-      </ThemeContext.Provider>
-    </UserPreferencesProvider>
+          >
+            <Tabs.Screen
+              name="index"
+              options={{
+                headerRight: () => <UnitsToggle />,
+                title: "Weight Tracker",
+              }}
+            />
+            <Tabs.Screen
+              name="search"
+              options={{
+                title: "Search",
+              }}
+            />
+          </Tabs>
+        </ThemeContext.Provider>
+      </UserPreferencesProvider>
+    </Provider>
   )
 }
