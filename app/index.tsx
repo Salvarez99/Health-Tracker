@@ -16,7 +16,7 @@ const Login: React.FC = () => {
   const handleSubmit = () => {
     console.log("Email:", email);
     console.log("Password:", password);
-    router.push("/graphScreen");
+    router.push("/tabs/graphScreen");
     // Add login logic here
   };
 

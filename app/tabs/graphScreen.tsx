@@ -19,9 +19,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ChartFilterButtons from "../components/ChartFilterButtons";
-import WeightGraph from "../components/WeightGraph";
-import * as Local from "../localDB/InitializeLocal";
+import ChartFilterButtons from "../../components/ChartFilterButtons";
+import WeightGraph from "../../components/WeightGraph";
+import * as Local from "../../localDB/InitializeLocal";
 
 export default function Index() {
   const router = useRouter();
@@ -108,7 +108,7 @@ export default function Index() {
   const onItemPress = (item: recordItem) => {
     console.log(`id: ${item.id} | date: ${item.date}`);
     router.push({
-      pathname: "/record/[date]",
+      pathname: "./record/[date]",
       params: {
         date: item.date,
       },
@@ -165,7 +165,7 @@ export default function Index() {
           ]}
           onPress={() =>
             router.push({
-              pathname: "/record/[date]",
+              pathname: "/tabs/record/[date]",
               params: { date: date ?? "" },
             })
           }
