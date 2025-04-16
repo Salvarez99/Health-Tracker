@@ -26,7 +26,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.salvarez99.healthapp",
-      "expo.android.googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -34,7 +34,14 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      ["expo-build-properties", {
+        "ios":{
+          "useFrameworks": "static"
+        }
+      }],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth"
     ],
     "experiments": {
       "typedRoutes": true
