@@ -7,6 +7,7 @@ import * as Local from "../../localDB/InitializeLocal"
 import { darkTheme } from "../../themes/DarkTheme"
 import { lightTheme } from "../../themes/LightTheme"
 
+// Layout
 const index = () => {
   const router = useRouter()
   const [theme, setTheme] = useState(lightTheme)
