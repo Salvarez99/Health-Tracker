@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { keys } from "./keys"
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://trackapi.nutritionix.com",
   prepareHeaders: (headers, { getState }) => {
-    const apiKey = keys.X_APP_KEY
-    const appId = keys.X_APP_ID
+    const apiKey = process.env.EXPO_PUBLIC_X_APP_KEY
+    const appId = process.env.EXPO_PUBLIC_X_APP_ID
     if (apiKey && appId) {
       headers.set("x-app-id", appId)
       headers.set("x-app-key", apiKey)
