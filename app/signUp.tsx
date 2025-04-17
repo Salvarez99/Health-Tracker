@@ -10,41 +10,30 @@ import {
 import auth from "@react-native-firebase/auth";
 import { FirebaseError } from "firebase/app";
 
-const Login: React.FC = () => {
+const SignUp: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    try {
-      await auth().signInWithEmailAndPassword(email, password);
-      console.log("User signed in successfully!");
+
+    try{
+      await auth().createUserWithEmailAndPassword(email, password);
+      console.log("User signed up successfully!");
       console.log("Email:", email);
       console.log("Password:", password);
       router.push("/tabs/graphScreen");
-    } catch (e: any) {
+    }catch(e : any){
       const err = e as FirebaseError;
-      alert("Sign in failed: " + err.message);
+      alert("Sign up failed: " + err.message);
     }
   };
 
-  const handleSignUp = async () => {
-    router.push("/signUp");
-  };
-
-  const debugLogin = async () => {
-    router.push("/tabs/graphScreen");
-  };
-  
-
-  useEffect(() => {
-    console.log("hello from login");
-  }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.form}>
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Sign Up</Text>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Email</Text>
           <TextInput
@@ -68,13 +57,7 @@ const Login: React.FC = () => {
           />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={debugLogin}>
-          <Text style={styles.buttonText}>Debug Login</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -135,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default SignUp;

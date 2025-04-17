@@ -11,7 +11,7 @@ const SearchIcon: React.FC = () => {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          router.push({ pathname: "/search" })
+          router.push({ pathname: "/tabs/search" })
         }}
       >
         <MaterialIcons name="search" size={16} color={theme.colors.textColor} />
