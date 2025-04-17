@@ -32,6 +32,11 @@ const Login: React.FC = () => {
     router.push("/signUp");
   };
 
+  const debugLogin = async () => {
+    router.push("/tabs/graphScreen");
+  };
+  
+
   useEffect(() => {
     console.log("hello from login");
   }, []);
@@ -67,6 +72,9 @@ const Login: React.FC = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={debugLogin}>
+          <Text style={styles.buttonText}>Debug Login</Text>
         </TouchableOpacity>
       </View>
     </View>
