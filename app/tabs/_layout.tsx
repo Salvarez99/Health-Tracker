@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import UnitsToggle from "@/components/UnitsToggle";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import { MaterialIcons, FontAwesome, Feather } from "@expo/vector-icons";
+import SearchIcon from "../../components/SearchIcon"
 
 export default function TabsLayout() {
   const theme = useContext(ThemeContext);
@@ -62,6 +63,16 @@ export default function TabsLayout() {
           headerTitleStyle,
           headerShown: true,
           href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="mealplan"
+        options={{
+          title: "Meal Plan",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="library-books" color={color} size={size} />
+          ),
+          headerRight: () => <SearchIcon />,
         }}
       />
     </Tabs>
