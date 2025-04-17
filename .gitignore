@@ -15,8 +15,8 @@ google-services.json
 GoogleService-Info.plist
 services/keys.tsx
 android/
-google-services.json
-GoogleService-Info.plist
+ios/
+.expo-shared/
 
 # macOS
 .DS_Store
