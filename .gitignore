@@ -18,6 +18,9 @@ android/
 ios/
 .expo-shared/
 
+package-lock.json
+
+
 # macOS
 .DS_Store
 
