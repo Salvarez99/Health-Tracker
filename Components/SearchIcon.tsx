@@ -11,10 +11,15 @@ const SearchIcon: React.FC = () => {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          router.push({ pathname: "/tabs/search" })
+          router.push({ pathname: "/search" })
         }}
       >
-        <MaterialIcons name="search" size={16} color={theme.colors.textColor} />
+        <MaterialIcons
+          style={styles.icon}
+          name="search"
+          size={16}
+          color={theme.colors.textColor}
+        />
       </TouchableOpacity>
     </View>
   )
@@ -37,5 +42,8 @@ const styles = StyleSheet.create({
   },
   switch: {
     marginHorizontal: 2,
+  },
+  icon: {
+    fontSize: 24,
   },
 })

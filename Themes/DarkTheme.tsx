@@ -1,4 +1,4 @@
-import { typeTheme } from "@/types/types";
+import { typeTheme } from "@/types/types"
 
 export const darkTheme: typeTheme = {
   isDark: true,
@@ -11,11 +11,11 @@ export const darkTheme: typeTheme = {
     buttonColor: "#333339",
   },
   chartPallete: {
-    backgroundColor: "#5f5f5f",
-    axisColor: "#a8ebfa",
-    chartLineColor: "#a8ebfa",
+    backgroundColor: "rgba(95, 95, 95, 1)",
+    axisColor: "rgba(168, 235, 250, 1)",
+    chartLineColor: "rgba(168, 235, 250, 1)",
   },
-};
+}
 
 // Default dark theme
 // colors: {

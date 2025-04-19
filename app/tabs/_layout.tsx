@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
-import { Tabs } from "expo-router";
-import UnitsToggle from "@/components/UnitsToggle";
-import { ThemeContext } from "@/contexts/ThemeContext";
-import { MaterialIcons, FontAwesome, Feather } from "@expo/vector-icons";
+import UnitsToggle from "@/components/UnitsToggle"
+import { ThemeContext } from "@/contexts/ThemeContext"
+import { MaterialIcons } from "@expo/vector-icons"
+import { Tabs } from "expo-router"
+import React, { useContext } from "react"
 import SearchIcon from "../../components/SearchIcon"
 
 export default function TabsLayout() {
-  const theme = useContext(ThemeContext);
+  const theme = useContext(ThemeContext)
 
   const headerStyle = {
     backgroundColor: theme.colors.tertiary,
     elevation: 10,
-  };
+  }
 
   const headerTitleStyle = {
     color: theme.colors.textColor,
-  };
+  }
 
   return (
     <Tabs
@@ -39,33 +39,6 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
-        options={{
-          title: "Search",
-          headerStyle,
-          headerTitleStyle,
-          headerShown: true,
-          tabBarIcon: ({ color, size }) => (
-            <Feather
-              name="search"
-              size={20}
-              color="black"
-              style={{ marginLeft: 1 }}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="record/[date]"
-        options={{
-          title: "Record Weight",
-          headerStyle,
-          headerTitleStyle,
-          headerShown: true,
-          href: null,
-        }}
-      />
-      <Tabs.Screen
         name="mealplan"
         options={{
           title: "Meal Plan",
@@ -76,5 +49,5 @@ export default function TabsLayout() {
         }}
       />
     </Tabs>
-  );
+  )
 }

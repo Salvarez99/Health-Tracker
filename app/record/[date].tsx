@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
-import * as Local from "../../../localDB/InitializeLocal.js"
+import * as Local from "../../localDB/InitializeLocal.js"
 
 export default function recordWeight() {
   const userPreferences = useContext(UserPreferencesContext)

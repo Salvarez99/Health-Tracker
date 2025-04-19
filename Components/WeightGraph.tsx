@@ -42,7 +42,7 @@ const WeightGraph: React.FC<props> = ({ data }) => {
         yAxisTextStyle={{ color: theme.colors.textColor }}
         xAxisLabelTextStyle={{ color: theme.colors.textColor }}
         scrollToEnd
-        animateOnDataChange
+        // animateOnDataChange
         focusEnabled
         unFocusOnPressOut
         delayBeforeUnFocus={1300}

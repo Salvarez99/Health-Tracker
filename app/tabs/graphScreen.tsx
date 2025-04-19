@@ -1,15 +1,15 @@
-import { filterRanges } from "@/constants/filterRanges";
-import { ThemeContext } from "@/contexts/ThemeContext";
-import { UserPreferencesContext } from "@/contexts/UserPreferencesContext";
+import { filterRanges } from "@/constants/filterRanges"
+import { ThemeContext } from "@/contexts/ThemeContext"
+import { UserPreferencesContext } from "@/contexts/UserPreferencesContext"
 import {
   convertMMMDDYYYY,
   convertToDbDateFormat,
   convertToMMDD,
   getRange,
-} from "@/helpers/helpers";
-import { DataPoint, recordItem } from "@/types/types";
-import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useContext, useEffect, useState } from "react";
+} from "@/helpers/helpers"
+import { DataPoint, recordItem } from "@/types/types"
+import { useFocusEffect, useRouter } from "expo-router"
+import { useCallback, useContext, useEffect, useState } from "react"
 import {
   Dimensions,
   FlatList,
@@ -18,102 +18,102 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import ChartFilterButtons from "../../components/ChartFilterButtons";
-import WeightGraph from "../../components/WeightGraph";
-import * as Local from "../../localDB/InitializeLocal";
+} from "react-native"
+import ChartFilterButtons from "../../components/ChartFilterButtons"
+import WeightGraph from "../../components/WeightGraph"
+import * as Local from "../../localDB/InitializeLocal"
 
 export default function Index() {
-  const router = useRouter();
-  const theme = useContext(ThemeContext);
-  const screenHeight = Dimensions.get("window").height;
+  const router = useRouter()
+  const theme = useContext(ThemeContext)
+  const screenHeight = Dimensions.get("window").height
 
-  const userPreferences = useContext(UserPreferencesContext);
+  const userPreferences = useContext(UserPreferencesContext)
   if (!userPreferences)
     throw new Error(
-      "UserPreferencesContext must be used within UserPreferencesProvider"
-    );
+      "UserPreferencesContext must be used within UserPreferencesProvider",
+    )
 
-  const [date, setDate] = useState<string | null>(null);
+  const [date, setDate] = useState<string | null>(null)
 
-  const [listData, setlistData] = useState<recordItem[]>([]);
-  const [graphData, setGraphData] = useState<DataPoint[]>([]);
+  const [listData, setlistData] = useState<recordItem[]>([])
+  const [graphData, setGraphData] = useState<DataPoint[]>([])
 
   const getCurrentDate = async () => {
-    const currentDate = new Date();
-    const formattedDate = convertToDbDateFormat(currentDate);
-    await setDate(formattedDate);
-    return formattedDate;
-  };
+    const currentDate = new Date()
+    const formattedDate = convertToDbDateFormat(currentDate)
+    await setDate(formattedDate)
+    return formattedDate
+  }
 
   const getFilterDate = async () => {
-    const formattedDate = await getCurrentDate();
+    const formattedDate = await getCurrentDate()
 
-    const filter = await userPreferences.filter;
-    const range = filterRanges[filter];
-    const dateRange = getRange(formattedDate, range);
-    return dateRange;
-  };
+    const filter = await userPreferences.filter
+    const range = filterRanges[filter]
+    const dateRange = getRange(formattedDate, range)
+    return dateRange
+  }
 
   const loadWeights = async () => {
-    const currentDate = await getCurrentDate();
-    const dateRange = await getFilterDate();
+    const currentDate = await getCurrentDate()
+    const dateRange = await getFilterDate()
 
     const fetchedWeights = await Local.fetchWeightsAfterDate(
       dateRange,
-      currentDate
-    );
-    const reversedWeights = [...fetchedWeights].reverse();
+      currentDate,
+    )
+    const reversedWeights = [...fetchedWeights].reverse()
 
     const dataPoints: DataPoint[] = fetchedWeights.map((item: recordItem) => ({
       label: convertToMMDD(item.date),
       value:
         userPreferences.units === "lbs" ? item.weight_lbs : item.weight_kgs,
       secondaryLabel: "asd",
-    }));
+    }))
 
-    setlistData([...reversedWeights]);
-    setGraphData([...dataPoints]);
-  };
+    setlistData([...reversedWeights])
+    setGraphData([...dataPoints])
+  }
 
   //On startup, get user prefs and weights
   useEffect(() => {
     const handleStart = async () => {
-      await loadWeights();
-    };
-    Local.createTable();
-    handleStart();
-  }, []);
+      await loadWeights()
+    }
+    Local.createTable()
+    handleStart()
+  }, [])
 
   //On focus, get weights
   useFocusEffect(
     useCallback(() => {
       const handleFocus = async () => {
-        await loadWeights();
-      };
+        await loadWeights()
+      }
 
-      handleFocus();
-    }, [])
-  );
+      handleFocus()
+    }, []),
+  )
 
   useEffect(() => {
     const handleFilterChange = async () => {
-      const user = await Local.fetchUserPrefs();
-      await userPreferences.setUnits(user.units);
-      await loadWeights();
-    };
-    handleFilterChange();
-  }, [userPreferences.filter, userPreferences.units]);
+      const user = await Local.fetchUserPrefs()
+      await userPreferences.setUnits(user.units)
+      await loadWeights()
+    }
+    handleFilterChange()
+  }, [userPreferences.filter, userPreferences.units])
 
   const onItemPress = (item: recordItem) => {
-    console.log(`id: ${item.id} | date: ${item.date}`);
+    console.log(`id: ${item.id} | date: ${item.date}`)
     router.push({
       pathname: "./record/[date]",
       params: {
         date: item.date,
       },
-    });
-  };
+    })
+  }
 
   const renderItem: ListRenderItem<recordItem> = ({ item }) => {
     return (
@@ -133,8 +133,8 @@ export default function Index() {
           {convertMMMDDYYYY(item.date)}
         </Text>
       </TouchableOpacity>
-    );
-  };
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -153,7 +153,7 @@ export default function Index() {
         <FlatList
           data={listData}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={true}
         />
       </View>
@@ -177,7 +177,7 @@ export default function Index() {
         </TouchableOpacity>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -216,4 +216,4 @@ const styles = StyleSheet.create({
     margin: 4,
     elevation: 5,
   },
-});
+})
