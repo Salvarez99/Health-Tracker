@@ -96,7 +96,7 @@ export default function recordWeight() {
               </TouchableOpacity>
               <DateTimePicker
                 mode="date"
-                display="calendar"
+                display="inline"
                 value={dateObj}
                 maximumDate={dateObj}
                 onChange={(event, selectedDate) => {

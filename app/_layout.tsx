@@ -55,13 +55,25 @@ export default function RootLayout() {
             initialRouteName="index"
             screenOptions={{
               headerShown: false,
+              headerStyle,
+              headerTitleStyle,
             }}
           >
             <Stack.Screen name="index" options={{}} />
             <Stack.Screen name="tabs" options={{}} />
             <Stack.Screen
               name="record/[date]"
-              options={{ headerShown: true, title: "Record Weight" }}
+              options={{
+                headerShown: true,
+                title: "Record Weight",
+                headerLeft: props => (
+                  <View style={styles.container}>
+                    <Link href="/tabs/graphScreen">
+                      <MaterialIcons style={styles.icon} name="chevron-left" />
+                    </Link>
+                  </View>
+                ),
+              }}
             />
             <Stack.Screen
               name="search"
@@ -92,7 +104,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 24,
-    marginRight: 8,
   },
   text: {
     fontSize: 18,

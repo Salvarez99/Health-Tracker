@@ -23,6 +23,8 @@ export default function TabsLayout() {
       screenOptions={{
         tabBarActiveTintColor: theme.colors.textColor,
         tabBarStyle: { backgroundColor: theme.colors.tertiary },
+        headerStyle,
+        headerTitleStyle,
       }}
     >
       <Tabs.Screen

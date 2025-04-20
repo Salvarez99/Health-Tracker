@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -46,7 +47,7 @@ const ResultView: React.FC<Props> = ({ searchPhrase }) => {
   )
 
   return (
-    <View>
+    <ScrollView contentContainerStyle={{ padding: 10 }}>
       <Text style={styles.sectionHeader}>Common Foods</Text>
       <FlatList
         data={data.common}
@@ -59,7 +60,7 @@ const ResultView: React.FC<Props> = ({ searchPhrase }) => {
         keyExtractor={(item, idx) => `branded-${item.nix_item_id}-${idx}`}
         renderItem={renderItem}
       />
-    </View>
+    </ScrollView>
   )
 }
 

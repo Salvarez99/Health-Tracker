@@ -1,7 +1,8 @@
+import MealGrid from "@/components/mealplan/MealGrid"
 import { ThemeContext } from "@/contexts/ThemeContext"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import React, { useContext, useState } from "react"
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 const MealPlan = () => {
   const [meals, setMeals] = useState({})
@@ -9,54 +10,87 @@ const MealPlan = () => {
   const [showPicker, setShowPicker] = useState(false)
 
   const theme = useContext(ThemeContext)
+
+  // Function to toggle the visibility of the DateTimePicker
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker)
+  }
+
   return (
-    <ScrollView
-      style={styles(theme).container}
-      contentContainerStyle={{ justifyContent: "center", flexGrow: 1 }}
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: theme.colors.backgroundColor },
+      ]}
     >
-      {showPicker ? (
-        <DateTimePicker
-          style={styles(theme).button}
-          value={date}
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) => {
-            setShowPicker(false)
-            if (selectedDate) setDate(selectedDate)
-          }}
-        />
-      ) : (
-        <TouchableOpacity
-          style={styles(theme).button}
-          onPress={() => {
-            setShowPicker(true)
-          }}
-        >
-          <Text
-            style={{ color: theme.colors.textColor }}
-          >{`Change Date ${date.toLocaleDateString("en-US")}`}</Text>
-        </TouchableOpacity>
+      {/* Button to trigger DateTimePicker */}
+      <TouchableOpacity
+        onPress={toggleDatePicker}
+        style={[styles.button, { backgroundColor: theme.colors.buttonColor }]}
+      >
+        <Text style={[styles.dateText, { color: theme.colors.textColor }]}>
+          {date.toDateString()}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Conditionally render DateTimePicker */}
+      {showPicker && (
+        <View style={styles.datePickerContainer}>
+          <DateTimePicker
+            value={date}
+            mode="date"
+            display="inline"
+            onChange={(event, selectedDate) => {
+              setShowPicker(false)
+              if (selectedDate) setDate(selectedDate)
+            }}
+            style={[
+              styles.datePicker,
+              { backgroundColor: theme.colors.buttonColor },
+            ]}
+          />
+        </View>
       )}
-      <Text>Meal Plan</Text>
-      <Text>This is the Meal Plan section.</Text>
-    </ScrollView>
+
+      {/* Meal Grid */}
+      <MealGrid />
+    </View>
   )
 }
 
 export default MealPlan
 
-const styles = (theme: React.ContextType<typeof ThemeContext>) =>
-  StyleSheet.create({
-    container: {
-      margin: 10, // Add some margin to the container for better aesthetics
-    },
-    button: {
-      backgroundColor: "#575757",
-      height: 34,
-      width: 140,
-      borderRadius: 20,
-      justifyContent: "center",
-      alignItems: "center",
-      elevation: 3,
-    },
-  })
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    overflow: "hidden",
+  },
+  button: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginBottom: 20,
+    backgroundColor: "#e0e0e0", // Light background for the button
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  dateText: {
+    fontSize: 18,
+    fontWeight: "500", // Slightly lighter font for the date text
+  },
+  datePickerContainer: {
+    borderRadius: 5,
+    overflow: "hidden",
+    marginVertical: 10,
+  },
+  datePicker: {
+    backgroundColor: "#f0f0f0",
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+})

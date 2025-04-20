@@ -165,7 +165,7 @@ export default function Index() {
           ]}
           onPress={() =>
             router.push({
-              pathname: "/tabs/record/[date]",
+              pathname: "/record/[date]",
               params: { date: date ?? "" },
             })
           }
