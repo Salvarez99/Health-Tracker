@@ -19,27 +19,29 @@ export const UserPreferencesProvider = ({
   )
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const loadUserPreferences = async () => {
-      try {
-        await Local.createUserPrefs()
-        const userPreferences = await Local.fetchUserPrefs()
-        console.log("UserPreferences:", userPreferences)
-        if (userPreferences) {
-          setTheme(userPreferences.theme_mode)
-          setUnits(userPreferences.units)
-          setFilter(userPreferences.filterRange)
-        }
-      } catch (error) {
-        console.error("Failed to load preferences:", error)
-      } finally {
-        setLoading(false)
+  // Refactor to load preferences asynchronously and set state
+  const loadUserPreferences = async () => {
+    try {
+      await Local.createUserPrefs() // Ensure prefs table is created
+      const userPreferences = await Local.fetchUserPrefs() // Fetch saved preferences
+
+      if (userPreferences) {
+        setTheme(userPreferences.theme_mode)
+        setUnits(userPreferences.units)
+        setFilter(userPreferences.filterRange)
       }
+    } catch (error) {
+      console.error("Failed to load preferences:", error)
+    } finally {
+      setLoading(false)
     }
-    console.log("Loading user preferences...")
-    loadUserPreferences()
+  }
+
+  useEffect(() => {
+    loadUserPreferences() // Load preferences on component mount
   }, [])
 
+  // If still loading, show the loading spinner
   if (loading) {
     return (
       <View style={[styles.container, { backgroundColor: "#FFF" }]}>

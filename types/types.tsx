@@ -29,6 +29,7 @@ export type typeTheme = {
     textColor: string
     backgroundColor: string
     buttonColor: string
+    subtitle: string
   }
   chartPallete: {
     backgroundColor: string

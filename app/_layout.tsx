@@ -78,6 +78,7 @@ export default function RootLayout() {
             <Stack.Screen
               name="search"
               options={{
+                title: "Search",
                 headerShown: true,
                 headerLeft: props => (
                   <View style={styles.container}>

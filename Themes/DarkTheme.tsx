@@ -9,6 +9,7 @@ export const darkTheme: typeTheme = {
     textColor: "#a8ebfa",
     backgroundColor: "#171717",
     buttonColor: "#333339",
+    subtitle: "#a8ebfa",
   },
   chartPallete: {
     backgroundColor: "rgba(95, 95, 95, 1)",
