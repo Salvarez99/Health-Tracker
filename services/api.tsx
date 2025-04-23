@@ -1,5 +1,5 @@
 import { createApi }  from "@reduxjs/toolkit/query/react"
-import { fetchBaseQuery } from "@reduxjs/toolkit/query"
+import { fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://trackapi.nutritionix.com",
