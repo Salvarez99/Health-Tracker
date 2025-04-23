@@ -7,24 +7,23 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import auth from "@react-native-firebase/auth";
-import { FirebaseError } from "firebase/app";
+
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
 
 const Login: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
   const handleSubmit = async () => {
-    try {
-      await auth().signInWithEmailAndPassword(email, password);
-      console.log("User signed in successfully!");
-      console.log("Email:", email);
-      console.log("Password:", password);
+    try{
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("User signed in successfully:", email);
       router.push("/tabs/graphScreen");
-    } catch (e: any) {
-      const err = e as FirebaseError;
-      alert("Sign in failed: " + err.message);
+    }catch (error) {
+      console.error("Error signing in:", error);
     }
   };
 

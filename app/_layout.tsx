@@ -7,11 +7,13 @@ import { Stack, Tabs } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import * as Local from "../localDB/InitializeLocal";
-import auth, {FirebaseAuthTypes} from "@react-native-firebase/auth";
+
+// import auth, {FirebaseAuthTypes} from "@react-native-firebase/auth";
+// import { initializeApp } from "firebase/app";
+import { auth } from "@/firebaseConfig"
 
 export default function RootLayout() {
   const [theme, setTheme] = useState(lightTheme);
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
   const headerStyle = {
     backgroundColor: theme.colors.tertiary,
@@ -32,16 +34,14 @@ export default function RootLayout() {
     }
   };
 
-  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
-    console.log("User state changed:", user);
-    setUser(user);
-  }
-
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged)
-    getUserPrefs();
-
-    return subscriber; // unsubscribe on unmount
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("User is signed in:", user.email);
+      } else {
+        console.log("No user is signed in.");
+      }
+    });
   }, []);
 
   return (

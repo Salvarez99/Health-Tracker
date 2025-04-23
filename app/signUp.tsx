@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import auth from "@react-native-firebase/auth";
-import { FirebaseError } from "firebase/app";
+
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
 
 const SignUp: React.FC = () => {
   const router = useRouter();
@@ -18,15 +19,12 @@ const SignUp: React.FC = () => {
   const handleSubmit = async () => {
 
     try{
-      await auth().createUserWithEmailAndPassword(email, password);
-      console.log("User signed up successfully!");
-      console.log("Email:", email);
-      console.log("Password:", password);
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User signed up successfully:", email);
       router.push("/tabs/graphScreen");
-    }catch(e : any){
-      const err = e as FirebaseError;
-      alert("Sign up failed: " + err.message);
-    }
+    }catch (error) {
+      console.error("Error signing up:", error);
+    } 
   };
 
 
