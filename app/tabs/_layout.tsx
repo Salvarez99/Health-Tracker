@@ -39,7 +39,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="search1"
+        name="search"
         options={{
           title: "Search",
           headerStyle,
