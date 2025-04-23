@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router"
 import React, { useContext } from "react"
 import {
   ActivityIndicator,
@@ -9,11 +10,11 @@ import {
   View,
 } from "react-native"
 import { Colors, ThemeContext } from "../contexts/ThemeContext"
-import { useSearchQuery } from "../services/api"
+import { decimalToFraction } from "../helpers/helpers"
+import { useInstantSearchQuery } from "../services/api"
 
 type Props = {
   searchPhrase: string
-  isCommon: boolean
 }
 
 type FoodItem = {
@@ -26,66 +27,10 @@ type FoodItem = {
   nix_item_id?: string
 }
 
-const decimalToFraction = (decimal: number): string => {
-  if (isNaN(decimal)) {
-    return "Invalid input"
-  }
-
-  // Handle whole numbers directly
-  if (decimal === Math.floor(decimal)) {
-    return `${decimal}`
-  }
-
-  // Handle common fractions
-  const fractions = [
-    { fraction: "1/8", value: 0.125 },
-    { fraction: "1/4", value: 0.25 },
-    { fraction: "3/8", value: 0.375 },
-    { fraction: "1/2", value: 0.5 },
-    { fraction: "5/8", value: 0.625 },
-    { fraction: "3/4", value: 0.75 },
-    { fraction: "7/8", value: 0.875 },
-    { fraction: "1/3", value: 0.333333 }, // Added 1/3
-    { fraction: "2/3", value: 0.666667 }, // Added 2/3
-  ]
-
-  // If the decimal is close to any of the common fractions, return the fraction
-  for (let i = 0; i < fractions.length; i++) {
-    if (Math.abs(decimal - fractions[i].value) < 0.01) {
-      return fractions[i].fraction
-    }
-  }
-
-  // For improper fractions (like 3/2), convert to mixed fraction (1 1/2)
-  if (decimal > 1) {
-    const wholeNumber = Math.floor(decimal)
-    const fractionalPart = decimal - wholeNumber
-    const fraction = decimalToFraction(fractionalPart)
-
-    return `${wholeNumber} ${fraction}`
-  }
-
-  // For decimals that are not close to common fractions, scale to the nearest integer fraction
-  const precision = 1000000 // Precision multiplier
-  const numerator = Math.round(decimal * precision)
-  const denominator = precision
-
-  // Function to compute greatest common divisor (GCD)
-  const gcd = (a: number, b: number): number => {
-    return b === 0 ? a : gcd(b, a % b)
-  }
-
-  const commonDivisor = gcd(numerator, denominator)
-
-  const simplifiedNumerator = numerator / commonDivisor
-  const simplifiedDenominator = denominator / commonDivisor
-
-  return `${simplifiedNumerator}/${simplifiedDenominator}`
-}
-
-const ResultView: React.FC<Props> = ({ searchPhrase, isCommon }) => {
+const ResultView: React.FC<Props> = ({ searchPhrase }) => {
+  const router = useRouter()
   const theme = useContext(ThemeContext)
-  const { data, isLoading, isError } = useSearchQuery(searchPhrase, {
+  const { data, isLoading, isError } = useInstantSearchQuery(searchPhrase, {
     skip: !searchPhrase,
   })
 
@@ -112,12 +57,22 @@ const ResultView: React.FC<Props> = ({ searchPhrase, isCommon }) => {
     )
   }
 
+  const handleItemPress = (item: string) => {
+    router.push({
+      pathname: "/food-details/[item]",
+      params: { item: item ?? "" },
+    })
+  }
+
   // Render item for FlatList (Card style)
   const renderItem = ({ item }: { item: FoodItem }) => (
-    <View style={styles(theme).card}>
+    <TouchableOpacity
+      style={styles(theme).card}
+      onPress={() => handleItemPress(item.food_name)}
+    >
       <Image source={{ uri: item.photo.thumb }} style={styles(theme).thumb} />
       <View style={styles(theme).itemTextContainer}>
-        <Text style={styles(theme).name}>{item.food_name}</Text>
+        <Text style={styles(theme).name}>{item.food_name.titleize()}</Text>
         <Text style={styles(theme).meta}>
           {decimalToFraction(item.serving_qty)} {item.serving_unit}
         </Text>
@@ -125,17 +80,13 @@ const ResultView: React.FC<Props> = ({ searchPhrase, isCommon }) => {
           <Text style={styles(theme).meta}>{item.brand_name}</Text>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   )
 
   return (
     <FlatList
-      data={isCommon ? data.common : data.branded}
-      keyExtractor={(item, idx) =>
-        isCommon
-          ? `common-${item.tag_id}-${idx}`
-          : `branded-${item.nix_item_id}-${idx}`
-      }
+      data={data.common}
+      keyExtractor={(item, idx) => `common-${item.tag_id}-${idx}`}
       renderItem={renderItem}
       ListEmptyComponent={
         <Text style={styles(theme).emptyMessage}>No results found</Text>

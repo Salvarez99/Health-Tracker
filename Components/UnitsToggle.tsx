@@ -1,6 +1,6 @@
 import { ThemeContext } from "@/contexts/ThemeContext"
 import { UserPreferencesContext } from "@/contexts/UserPreferencesContext"
-import { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { StyleSheet, Switch, Text, View } from "react-native"
 import * as Local from "../localDB/InitializeLocal"
 

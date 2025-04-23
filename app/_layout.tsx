@@ -76,6 +76,20 @@ export default function RootLayout() {
               }}
             />
             <Stack.Screen
+              name="food-details/[item]"
+              options={{
+                headerShown: true,
+                title: "Food Details",
+                headerLeft: props => (
+                  <View style={styles.container}>
+                    <Link href="/search">
+                      <MaterialIcons style={styles.icon} name="chevron-left" />
+                    </Link>
+                  </View>
+                ),
+              }}
+            />
+            <Stack.Screen
               name="search"
               options={{
                 title: "Search",

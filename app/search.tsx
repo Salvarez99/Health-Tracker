@@ -2,22 +2,14 @@ import ResultView from "@/components/ResultView"
 import SearchBar from "@/components/SearchBar"
 import { Colors, ThemeContext } from "@/contexts/ThemeContext"
 import React, { useContext, useState } from "react"
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 
 const Search: React.FC = () => {
   const theme = useContext(ThemeContext)
-  const [isCommon, setIsCommon] = useState(true)
 
   const [searchPhrase, setSearchPhrase] = useState("")
   const [clicked, setClicked] = useState(false)
 
-  const handleCommonPress = () => {
-    setIsCommon(true)
-  }
-
-  const handleBrandedPress = () => {
-    setIsCommon(false)
-  }
   return (
     <View style={styles(theme).container}>
       <SearchBar
@@ -26,43 +18,7 @@ const Search: React.FC = () => {
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
       />
-      <View style={styles(theme).buttonContainer}>
-        <TouchableOpacity
-          style={isCommon ? styles(theme).activeButton : styles(theme).button}
-          onPress={handleCommonPress}
-        >
-          <Text
-            style={
-              isCommon
-                ? styles(theme).activeButtonText
-                : styles(theme).buttonText
-            }
-          >
-            Common Items
-          </Text>
-          {isCommon && <View style={styles(theme).activeButtonBar} />}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            !isCommon ? styles(theme).activeButton : styles(theme).button,
-          ]}
-          onPress={handleBrandedPress}
-        >
-          <Text
-            style={
-              !isCommon
-                ? styles(theme).activeButtonText
-                : styles(theme).buttonText
-            }
-          >
-            Branded Items
-          </Text>
-
-          {!isCommon && <View style={styles(theme).activeButtonBar} />}
-        </TouchableOpacity>
-      </View>
-
-      <ResultView searchPhrase={searchPhrase} isCommon={isCommon} />
+      <ResultView searchPhrase={searchPhrase} />
     </View>
   )
 }
