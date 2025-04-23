@@ -1,29 +1,27 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+// firebaseConfig.js
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { initializeApp } from "firebase/app"
+import { getReactNativePersistence, initializeAuth } from "firebase/auth"
+
+// Your Firebase configuration (Replace these with your own project's config)
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDfGcoVkigfHR0eMQz7bwB0ktdVx3KfOxo",
+  apiKey: process.env.EXPO_PUBLIC_X_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_X_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_X_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_X_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_X_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_X_FIREBASE_APP_ID,
+  measurementId: process.env.EXPO_PUBLIC_X_FIREBASE_MEASUREMENT_ID,
+}
 
-  authDomain: "health-app-de437.firebaseapp.com",
+// Initialize Firebase App
+const app = initializeApp(firebaseConfig)
 
-  projectId: "health-app-de437",
-
-  storageBucket: "health-app-de437.firebasestorage.app",
-
-  messagingSenderId: "679631654559",
-
-  appId: "1:679631654559:web:703bc727d62925abce9caa",
-
-  measurementId: "G-N575JCRHVK"
-
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
+// Initialize Firebase Auth with persistence for React Native
 const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-});
+  persistence: getReactNativePersistence(AsyncStorage),
+})
 
-export { app, auth };
+// Export initialized app and auth instances
+export { app, auth }

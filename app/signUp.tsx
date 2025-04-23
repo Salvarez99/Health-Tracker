@@ -1,32 +1,29 @@
-import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "expo-router"
+import React, { useState } from "react"
 import {
-  View,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+  View,
+} from "react-native"
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/firebaseConfig";
+import { auth } from "@/firebaseConfig"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 
 const SignUp: React.FC = () => {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleSubmit = async () => {
-
-    try{
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User signed up successfully:", email);
-      router.push("/tabs/graphScreen");
-    }catch (error) {
-      console.error("Error signing up:", error);
-    } 
-  };
-
+    try {
+      await createUserWithEmailAndPassword(auth, email, password)
+      console.log("User signed up successfully:", email)
+    } catch (error) {
+      console.error("Error signing up:", error)
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -59,8 +56,8 @@ const SignUp: React.FC = () => {
         </TouchableOpacity>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -114,6 +111,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-});
+})
 
-export default SignUp;
+export default SignUp

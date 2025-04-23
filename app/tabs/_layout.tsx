@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
-import { Tabs } from "expo-router";
-import UnitsToggle from "@/components/UnitsToggle";
-import { ThemeContext } from "@/contexts/ThemeContext";
-import { MaterialIcons, FontAwesome, Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons"
+import { Tabs } from "expo-router"
+import React, { useContext } from "react"
 import SearchIcon from "../../components/SearchIcon"
+import UnitsToggle from "../../components/UnitsToggle"
+import { ThemeContext } from "../../contexts/ThemeContext"
 
 export default function TabsLayout() {
-  const theme = useContext(ThemeContext);
+  const theme = useContext(ThemeContext)
 
   const headerStyle = {
     backgroundColor: theme.colors.tertiary,
     elevation: 10,
-  };
+  }
 
   const headerTitleStyle = {
     color: theme.colors.textColor,
-  };
+  }
 
   return (
     <Tabs
@@ -39,7 +39,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="search"
+        name="search1"
         options={{
           title: "Search",
           headerStyle,
@@ -76,5 +76,5 @@ export default function TabsLayout() {
         }}
       />
     </Tabs>
-  );
+  )
 }

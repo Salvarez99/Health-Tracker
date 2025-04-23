@@ -1,44 +1,46 @@
-import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "expo-router"
+import React, { useEffect, useState } from "react"
 import {
-  View,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+  View,
+} from "react-native"
 
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "../firebaseConfig"
 
 const Login: React.FC = () => {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleSubmit = async () => {
-    try{
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log("User signed in successfully:", email);
-      router.push("/tabs/graphScreen");
-    }catch (error) {
-      console.error("Error signing in:", error);
+    if (!email || !password) {
+      console.error("Email and password are required")
+      return
     }
-  };
+
+    try {
+      await signInWithEmailAndPassword(auth, email.trim(), password)
+      console.log("User signed in successfully:", email)
+    } catch (error) {
+      console.error("Error signing in:", error)
+    }
+  }
 
   const handleSignUp = async () => {
-    router.push("/signUp");
-  };
+    router.push("/signUp")
+  }
 
   const debugLogin = async () => {
-    router.push("/tabs/graphScreen");
-  };
-  
+    router.push("/tabs/graphScreen")
+  }
 
   useEffect(() => {
-    console.log("hello from login");
-  }, []);
+    console.log("hello from login")
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -77,8 +79,8 @@ const Login: React.FC = () => {
         </TouchableOpacity>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -132,6 +134,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-});
+})
 
-export default Login;
+export default Login
